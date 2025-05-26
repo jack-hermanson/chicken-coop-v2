@@ -6,8 +6,8 @@ from flask_login import current_user, login_user
 from sqlalchemy import func
 
 from application import bcrypt, db, logger
+from application.utils.date_time import utc_to_local
 
-from ...utils.date_time import utc_to_local
 from .clearance_enum import ClearanceEnum
 from .forms import CreateAccountForm, EditAccountForm, LoginForm
 from .models import Account

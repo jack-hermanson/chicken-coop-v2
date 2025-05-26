@@ -15,4 +15,4 @@ class Account(db.Model, UserMixin):
     email = db.Column(db.String(42), unique=True, nullable=False)
     password = db.Column(db.String, nullable=False)
     clearance = db.Column(db.Integer, default=ClearanceEnum.UNVERIFIED, nullable=False)
-    last_login = db.Column(db.DateTime, nullable=True)
+    last_login = db.Column(db.DateTime(timezone=True), nullable=True)
