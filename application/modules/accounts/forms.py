@@ -70,7 +70,9 @@ class LoginForm(FlaskForm):
             "autocapitalize": "off",
         },
     )
-    password = PasswordField("PIN", validators=[DataRequired(), password_length], render_kw={})
+    password = PasswordField(
+        "PIN", validators=[DataRequired(), password_length], render_kw={"inputmode": "numeric", "pattern": "[0-9]*"}
+    )
     remember = BooleanField("Remember Me", default=True)
     submit = SubmitField("Log In")
 
@@ -85,13 +87,13 @@ class CreateAccountForm(CreateOrEditFormBase):
         "PIN",
         validators=[DataRequired(), password_length],
         description="A 4-digit PIN that you can easily remember",
-        render_kw={"inputmode": "tel"},
+        render_kw={"inputmode": "numeric", "pattern": "[0-9]*"},
     )
     confirm_password = PasswordField(
         "Confirm PIN",
         validators=[DataRequired(), EqualTo("password", "Your PINs must match.")],
         description="Type in your PIN again to confirm it's correct.",
-        render_kw={"inputmode": "tel"},
+        render_kw={"inputmode": "numeric", "pattern": "[0-9]*"},
     )
     submit = SubmitField("Create Account")
 
@@ -113,11 +115,15 @@ class CreateAccountForm(CreateOrEditFormBase):
 # if we allowed editing name, then CreateOrEditFormBase will be used, until then don't inherit
 # class EditAccountForm(CreateOrEditFormBase):
 class EditAccountForm(CreateOrEditFormBase):
-    password = PasswordField("PIN", validators=[password_length], render_kw={"inputmode": "tel"})
+    password = PasswordField(
+        "PIN",
+        validators=[password_length],
+        render_kw={"inputmode": "numeric", "pattern": "[0-9]*"},
+    )
     confirm_password = PasswordField(
         "Confirm PIN",
         validators=[EqualTo("password", "Your PINs must match.")],
-        render_kw={"inputmode": "tel"},
+        render_kw={"inputmode": "numeric", "pattern": "[0-9]*"},
     )
     submit = SubmitField("Save Changes")
 
