@@ -71,7 +71,9 @@ class LoginForm(FlaskForm):
         },
     )
     password = PasswordField(
-        "PIN", validators=[DataRequired(), password_length], render_kw={"inputmode": "numeric", "pattern": "[0-9]*"}
+        "PIN",
+        validators=[DataRequired(), password_length],
+        render_kw={"inputmode": "numeric", "pattern": "[0-9]*"},
     )
     remember = BooleanField("Remember Me", default=True)
     submit = SubmitField("Log In")
@@ -91,7 +93,7 @@ class CreateAccountForm(CreateOrEditFormBase):
     )
     confirm_password = PasswordField(
         "Confirm PIN",
-        validators=[DataRequired(), EqualTo("password", "Your PINs must match.")],
+        validators=[DataRequired(), password_length, EqualTo("password", "Your PINs must match.")],
         description="Type in your PIN again to confirm it's correct.",
         render_kw={"inputmode": "numeric", "pattern": "[0-9]*"},
     )

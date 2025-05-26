@@ -34,7 +34,7 @@ def logout() -> ResponseReturnValue:
         flash("You are not logged in, so you cannot log out!", "danger")
         return redirect(url_for("accounts.login"))
 
-    name = current_user.username
+    name = current_user.first_name
     logout_user()
     flash(f"Goodbye, {name}.", "info")
     return redirect(url_for("main.index"))

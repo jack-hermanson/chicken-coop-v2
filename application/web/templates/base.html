@@ -78,7 +78,7 @@
                         {{ nav_link(href="#", active=(active_route == "newsletters"), icon="fa-envelope", text="Newsletters") }}
                     {% endif %}
                     {% if current_user.is_authenticated and current_user.clearance >= ClearanceEnum.ADMIN %}
-                        {{ nav_link(href=url_for('admin.dashboard'), active=(active_route == "admin"), icon="fa-cog", text="Admin") }}
+                        {{ nav_link(href="#", active=(active_route == "admin"), icon="fa-cog", text="Admin") }}
                     {% endif %}
                     {{ nav_link(href="#", active=(active_route == "help"), icon="fa-question", text="Help") }}
                 </nav>
@@ -189,7 +189,13 @@
         <div class="d-flex px-lg-2">
 
             <div class="me-auto d-flex">
-                <span class="h6 text-muted my-auto">Build {{ commit }}</span>
+                <span class="h6 text-muted my-auto font-monospace small">Version
+                    {% if current_user.is_authenticated %}
+                    <a href="https://github.com/jack-hermanson/chicken-coop-v2/commit/{{ commit }}" target="_blank">{{ commit }}</a>
+                    {% else %}
+                        {{ commit }}
+                    {% endif %}
+                </span>
             </div>
         </div>
     </div>
