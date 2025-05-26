@@ -7,6 +7,7 @@ from sqlalchemy import func
 
 from application import bcrypt, db, logger
 
+from ...utils.date_time import utc_to_local
 from .clearance_enum import ClearanceEnum
 from .forms import CreateAccountForm, EditAccountForm, LoginForm
 from .models import Account
@@ -39,7 +40,11 @@ def log_user_in(form: LoginForm) -> bool:
     account: Account = Account.query.filter(func.lower(Account.username) == func.lower(form.username.data)).first()
     if account and bcrypt.check_password_hash(account.password, form.password.data):
         login_user(account, remember=form.remember.data)
-        last_login = account.last_login.strftime("%a %d %b %Y, %I:%M%p") if account.last_login is not None else "never"
+        last_login = (
+            utc_to_local(account.last_login.strftime("%a %d %b %Y, %I:%M%p"))
+            if account.last_login is not None
+            else "never"
+        )
         flash(f"Welcome back, {account.first_name}. Your last login was {last_login}.", "info")
         current_user.last_login = datetime.now(tz=UTC)
         db.session.commit()
