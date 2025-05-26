@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% from "_macros/form.html" import form_group %}
+{% from "_macros/breadcrumbs.html" import breadcrumbs %}
+
+{% set title = "Edit Account" %}
+{% set active_route = "accounts" %}
+
+
+{% block breadcrumbs %}
+    {{ breadcrumbs(
+        crumbs=[
+            (url_for("accounts.me"), current_user.first_name),
+            (url_for("accounts.edit"), "Edit")
+        ]
+    )}}
+{% endblock breadcrumbs %}
+
+{% block body %}
+    <div class="row">
+        <div class="col">
+            <p class="lead">
+                Edit your account information on this page. You can leave the password fields blank if you
+                do not want to reset your password.
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <form action="{{ url_for('accounts.edit') }}" method="POST">
+                {{ form.hidden_tag() }}
+                <fieldset>
+                    <legend>Account Information</legend>
+                    <div class="row">
+                        <div class="col-12 col-lg-6">
+                            {{ form_group(form, name="first_name", required=True) }}
+                        </div>
+                        <div class="col-12 col-lg-6">
+                            {{ form_group(form, name="last_name", required=True) }}
+                        </div>
+                    </div>
+                    {{ form_group(form, name="email") }}
+                    {{ form_group(form, name="username", required=True) }}
+                </fieldset>
+                <fieldset>
+                    <legend>Password</legend>
+                    <div class="bd-callout bd-callout-success">
+                        <p class="mb-0">If you don't want to change your password, then just leave the password fields
+                            blank.</p>
+                    </div>
+
+                    {{ form_group(form, name="password") }}
+                    {{ form_group(form, name="confirm_password") }}
+                </fieldset>
+                <div class="bottom-buttons">
+                    {{ form.submit(class="btn btn-success") }}
+                    <a href="{{ url_for('accounts.edit') }}" class="btn btn-secondary">Reset</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock body %}

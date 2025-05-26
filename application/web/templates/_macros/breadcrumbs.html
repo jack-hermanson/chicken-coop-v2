@@ -1,0 +1,17 @@
+{% macro breadcrumbs(crumbs=[]) %}
+{#  crumbs are (url, label)  #}
+    <div class="mb-3">
+        <nav
+            style="--bs-breadcrumb-divider: ' &#8250; ';"
+            aria-label="breadcrumb">
+            <ol class="breadcrumb lh-1">
+                {% for crumb in crumbs %}
+                    <li class="breadcrumb-item  {% if loop.last %}active{% endif %}">
+                        <a href="{{ crumb[0] }}">{{ crumb[1] }}</a>
+                    </li>
+                {% endfor %}
+            </ol>
+        </nav>
+    </div>
+
+{% endmacro %}

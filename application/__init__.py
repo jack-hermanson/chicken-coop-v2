@@ -1,36 +1,77 @@
+import logging
 import os
 import subprocess
 
 from flask import Flask, request
+from flask_bcrypt import Bcrypt
+from flask_login import LoginManager, current_user
+from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
 
+from application.modules.accounts.clearance_enum import ClearanceEnum
+from application.utils.crud_enum import CrudEnum
+from application.utils.get_ip import get_ip
 from Config import Config
-from utils.get_ip import get_ip
+from logger import logger
+
+bcrypt = Bcrypt()
+db = SQLAlchemy()
+migrate = Migrate(compare_type=True)
+logging.basicConfig(level=logging.DEBUG)
+
+login_manager = LoginManager()
+login_manager.login_view = "accounts.login"
+login_manager.login_message_category = "warning"
 
 
-def create_app(config_class=Config):
+def create_app(config_class: Config = Config) -> Flask:
+    # create app, set static stuff up
     app = Flask(__name__, static_url_path="/static", static_folder="web/static", template_folder="web/templates")
 
+    # set up environment variables
     app.config.from_object(config_class)
 
+    # bcrypt
+    bcrypt.init_app(app)
+
+    # models
+    import application.modules.accounts.models  # noqa: F401
+
+    # database
+    db.app = app
+    db.init_app(app)
+    migrate.init_app(app, db)
+
+    # routes and blueprints
+    from application.modules.accounts.routes import accounts
+    from application.modules.main.routes import main
+
+    for blueprint in [accounts, main]:
+        app.register_blueprint(blueprint)
+
+    # login manager
+    login_manager.init_app(app)
+
+    # template filters / context processors / pre-request stuff
     @app.context_processor
-    def inject_environment():
-        return dict(
-            commit=subprocess.check_output(["git", "describe", "--always"]).strip().decode("utf-8"),
-            environment=os.environ.get("ENVIRONMENT"),
-            # get_ip=get_ip
-        )
+    def inject_environment() -> dict:
+        return {
+            "commit": subprocess.check_output(["git", "describe", "--always"]).strip().decode("utf-8"),
+            "environment": os.environ.get("ENVIRONMENT"),
+            "ClearanceEnum": ClearanceEnum,
+            "CrudEnum": CrudEnum,
+        }
 
-    # todo - remove this
-    @app.route("/")
-    def index():
-        # return "hi"
-        return f"""
-        <html style="background-color: #222; color: #ddd; font-family: sans-serif;">
-        <body>
-        <h1>Hi {get_ip(request=request)}</h1>
-        </body>
-        </html>
-        """
+    @app.before_request
+    def before_request() -> None:
+        if not request.path.startswith("/static"):
+            logger.debug(
+                f"[{current_user.username if current_user.is_authenticated else 'anon'} - {get_ip(request)}] "
+                f"{request.method}: {request.path} ",
+            )
 
-    print("RUNNING APPLICATION")
+    logger.info("APPLICATION RUNNING, probably at http://localhost:5040")
+    flask_debug = bool(int(os.environ.get("FLASK_DEBUG")))
+    logger.info(f"FLASK_DEBUG: '{flask_debug}'")
+
     return app

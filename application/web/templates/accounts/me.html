@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "_macros/form.html" import form_group %}
+{% from "_macros/action_dropdown.html" import action_dropdown, action_dropdown_item, action_dropdown_separator %}
+
+{% set active_route = "accounts" %}
+
+
+
+{% block body %}
+    <p>This is the "me" page for:</p>
+    <p>{{ current_user.first_name }}</p>
+{% endblock body %}
+
+{% block actions %}
+	{% call action_dropdown() %}
+        {{ action_dropdown_item("Edit", url_for("accounts.edit")) }}
+        {{ action_dropdown_separator() }}
+        {{ action_dropdown_item("Log out", url_for("accounts.logout")) }}
+    {% endcall %}
+{% endblock %}

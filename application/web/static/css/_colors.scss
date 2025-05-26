@@ -1,0 +1,27 @@
+//$main-color: #3669AC;
+$main-color: #629aa9;
+
+// Custom color definitions
+$primary: $main-color;  // Muted Navy Blue
+$secondary: #6c757d;  // Muted Gray
+$success: #2d6a4f;  // Deep Green
+$info: #4c6788;  // Muted Blue
+$warning: #b08968;  // Warm Brown
+$danger: #a63d40;  // Dark Red
+$light: #e9ecef;  // Soft Gray
+$dark: #212529;  // Deep Charcoal
+
+// Inject custom colors into Bootstrap's theme system
+$theme-colors: (
+  "primary": $primary,
+  "secondary": $secondary,
+  "success": $success,
+  "info": $info,
+  "warning": $warning,
+  "danger": $danger,
+  "light": $light,
+  "dark": $dark
+);
+
+
+$body-bg: #f2f2f2;

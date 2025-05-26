@@ -1,0 +1,27 @@
+{% macro action_dropdown(menu_name="Actions", color="secondary") %}
+    <div class="dropdown">
+        <button class="btn btn-sm btn-{{ color }} dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+            {{ menu_name }}
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+            {{ caller() }}
+{#            <li><a class="dropdown-item" href="#">Action</a></li>#}
+{#            <li><a class="dropdown-item" href="#">Another action</a></li>#}
+{#            <li>#}
+{#                <hr class="dropdown-divider">#}
+{#            </li>#}
+{#            <li><a class="dropdown-item" href="#">Something else here</a></li>#}
+        </ul>
+    </div>
+{% endmacro %}
+
+{% macro action_dropdown_item(name, href) %}
+    <li><a class="dropdown-item" href="{{ href }}">{{ name }}</a></li>
+{% endmacro %}
+
+{% macro action_dropdown_separator() %}
+    <li>
+        <hr class="dropdown-divider">
+    </li>
+{% endmacro %}

@@ -1,0 +1,36 @@
+{% macro form_group(form, name, type="text", required=False, class="", id=None, render_kw={}) %}
+    <div class="form-group {{ class }}">
+        {% if form[name].type == "BooleanField" %}
+            <div class="form-check">
+                {{ form[name](
+                        class="form-check-input",
+                        id=(id if id else form[name].id),
+                        **render_kw) }}
+                {{ form[name].label(class="form-check-label", for=(id if id else form[name].id)) }}
+            </div>
+        {% else %}
+            {{ form[name].label(
+                class=("form-label " + ("required" if required else "")),
+                for=(id if id else form[name].id)) }}
+
+            {{ form[name](
+                class=(
+                    ("form-select " if form[name].type == "SelectField" else "form-control ") +
+                    ("is-invalid" if form[name].errors else "")
+                ),
+                id=(id if id else form[name].id),
+                **render_kw) }}
+        {% endif %}
+
+        {% if form[name].errors %}
+            {% for error in form[name].errors %}
+                <div class="text-danger">{{ error }}</div>
+            {% endfor %}
+        {% endif %}
+
+        {% if form[name].description %}
+            <div class="small form-text text-muted mt-2">{{ form[name].description }}</div>
+        {% endif %}
+    </div>
+{% endmacro %}
+
