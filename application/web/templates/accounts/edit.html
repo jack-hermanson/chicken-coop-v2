@@ -5,6 +5,9 @@
 {% set title = "Edit Account" %}
 {% set active_route = "accounts" %}
 
+{% set subtitle = "Edit your account information on this page. You can leave the password fields blank if you
+                do not want to reset your password." %}
+
 
 {% block breadcrumbs %}
     {{ breadcrumbs(
@@ -16,14 +19,6 @@
 {% endblock breadcrumbs %}
 
 {% block body %}
-    <div class="row">
-        <div class="col">
-            <p class="lead">
-                Edit your account information on this page. You can leave the password fields blank if you
-                do not want to reset your password.
-            </p>
-        </div>
-    </div>
     <div class="row">
         <div class="col">
             <form action="{{ url_for('accounts.edit') }}" method="POST">

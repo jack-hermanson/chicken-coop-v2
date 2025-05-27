@@ -16,8 +16,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
     <meta name="og:url" content="{{ request.url }}">
-    {#todo - image#}
-    {#    <meta name="og:image" content="{{ url_for('static', filename='images/balcony.JPG', _external=True) }}">#}
+    <meta name="og:image" content="{{ url_for('static', filename='images/chicken_og_tag_img.jpg', _external=True) }}">
     <meta name="og:description"
           content="The Morey Community Garden has a chicken coop/co-op. This is it!">
     <script src="{{ url_for("static", filename="node_modules/htmx.org/dist/htmx.min.js") }}"></script>
@@ -31,27 +30,28 @@
             id="nav"
             class="offcanvas-lg offcanvas-start col-lg-2 h-100 flex-grow-1 px-lg-2 sidebar border-end overflow-y-auto"
         >
+            {# DESKTOP ONLY #}
             <nav class="navbar">
                 <div class="container-fluid">
                     <a href="{{ url_for('main.index') }}" class="navbar-brand d-flex mx-auto">
-                        {#        todo logo #}
-                        {#            <img alt="logo" src="{{ url_for("static", filename="logo-transparent.png") }}" height="42"#}
-                        {#                 class="d-inline-block align-text-top logo me-2">#}
+                        <img alt="logo" src="{{ url_for("static", filename="favicon.png") }}" height="25"
+                             class="d-inline-block my-auto logo me-1">
                         <span class="d-inline-flex align-items-center my-auto pt-1">
                             <span>
                                 Morey Chickens
+                                {# desktop #}
                             </span>
                             {% if environment != "production" %}
                                 <span
-                                    class="env-label d-flex my-auto pt-1"
+                                    class="env-label d-flex my-auto pt-1 ms-2"
                                 >
-                                    {{ ' {' }}
+{#                                    {{ '{' }}#}
                                     {% if environment == "development" %}
                                         dev
                                     {% else %}
                                         {{ environment }}
                                     {% endif %}
-                                    {{ '}' }}
+                                    {#                                    {{ '}' }}#}
                                 </span>
                             {% endif %}
                         </span>
@@ -59,36 +59,37 @@
                 </div>
             </nav>
             <div class="container-fluid pt-0">
-                <nav class="nav nav-pills flex-column">
-                    {{ nav_link(href=url_for('main.index'), active=(active_route == "main"), icon="fa-home", text="Home") }}
+                <nav class="nav nav-pills flex-column h-100">
+                    {{ nav_link(href=url_for("about.index"), active=(active_route == "about"), icon="fa-egg", text="About / FAQs") }}
+                    {{ nav_link(href="#", active=(active_route == "support"), icon="fa-hand-holding-heart", text="Support the Chickens") }}
+                    {{ nav_link(href="#", active=(active_route == "contact"), icon="fa-comments", text="Contact Us") }}
+
+
+                    {% if current_user.is_authenticated and current_user.clearance >= ClearanceEnum.NORMAL %}
+                        <hr class="my-2">
+                        {{ nav_link(href=url_for('main.index'), active=(active_route == "main"), icon="fa-home", text="Dashboard") }}
+                        {{ nav_link(href="#", active=(active_route == "schedule"), icon="fa-calendar-days", text="Schedule") }}
+                        {{ nav_link(href="#", active=(active_route == "notebook"), icon="fa-book-open", text="Notebook") }}
+                        {{ nav_link(href="#", active=(active_route == "finances"), icon="fa-piggy-bank", text="Finances") }}
+                        {{ nav_link(href="#", active=(active_route == "maintenance"), icon="fa-screwdriver-wrench", text="Maintenance") }}
+                    {% endif %}
+                    {% if current_user.is_authenticated and current_user.clearance >= ClearanceEnum.ADMIN %}
+                        {{ nav_link(href="#", active=(active_route == "admin"), icon="fa-cog", text="Admin") }}
+                    {% endif %}
+                    <hr class="my-2">
+                    {{ nav_link(href="#", active=(active_route == "help"), icon="fa-question", text="Help") }}
                     {% if current_user.is_authenticated %}
                         {{ nav_link(href=url_for('accounts.me'), active=(active_route == "accounts"), icon="fa-user", text=(current_user.first_name|capitalize)) }}
                     {% else %}
                         {{ nav_link(href=url_for('accounts.login'), active=(active_route == "accounts"), icon="fa-user", text="Login") }}
                     {% endif %}
-                    {% if current_user.is_authenticated and current_user.clearance >= ClearanceEnum.NORMAL %}
-                        {{ nav_link(href="#", active=(active_route == "meetings"), icon="fa-people-roof", text="Meetings") }}
-                        {{ nav_link(href="#", active=(active_route == "contacts"), icon="fa-address-book", text="Contacts") }}
-                        {{ nav_link(href="#", active=(active_route == "board"), icon="fa-users-between-lines", text="Board Members") }}
-                        {{ nav_link(href="#", active=(active_route == "bylaws"), icon="fa-scale-balanced", text="Bylaws") }}
-                        {{ nav_link(href="#", active=(active_route == "inventory"), icon="fa-box-open", text="Inventory") }}
-                        {{ nav_link(href="#", active=(active_route == "finances"), icon="fa-file-invoice-dollar", text="Finances") }}
-                        {{ nav_link(href="#", active=(active_route == "members"), icon="fa-house-circle-check", text="Members") }}
-                        {{ nav_link(href="#", active=(active_route == "notebook"), icon="fa-book", text="Notebook") }}
-                        {{ nav_link(href="#", active=(active_route == "newsletters"), icon="fa-envelope", text="Newsletters") }}
-                    {% endif %}
-                    {% if current_user.is_authenticated and current_user.clearance >= ClearanceEnum.ADMIN %}
-                        {{ nav_link(href="#", active=(active_route == "admin"), icon="fa-cog", text="Admin") }}
-                    {% endif %}
-                    {{ nav_link(href="#", active=(active_route == "help"), icon="fa-question", text="Help") }}
+
                 </nav>
             </div>
             <div class="mt-auto pb-3 d-flex d-lg-none">
                 <button data-bs-toggle="offcanvas" data-bs-target="#nav"
                         class="btn btn-outline-secondary mx-auto">
-
                     <i class="fa fa-times me-1"></i>
-
                     Close
                 </button>
             </div>
@@ -99,10 +100,13 @@
                 <nav class="navbar mobile-nav">
                     <div class="container-fluid">
                         <a href="{{ url_for('main.index') }}" class="navbar-brand d-flex">
-
                             <h4 class="d-inline-flex align-items-center my-auto">
-                                <span>
+                                {#  todo - abstract out repeated stuff #}
+                                <img alt="logo" src="{{ url_for("static", filename="favicon.png") }}" height="30"
+                                     class="d-inline-block align-text-top logo me-1">
+                                <span class="me-1">
                                     Morey Chickens
+                                    {# mobile #}
                                 </span>
                                 {% if environment != "production" %}
                                     <span
@@ -156,7 +160,7 @@
                 {% if not hide_title_row %}
                     <div class="row">
                         <div class="col-12">
-                            <div class="page-title mb-3 {% if title_row_no_border %}no-border-bottom{% endif %}">
+                            <div class="page-title {% if subtitle %}mb-1{% else %}mb-3{% endif %} {% if title_row_no_border %}no-border-bottom{% endif %}">
                                 <h2 class="mb-0">
                                     {% if title %}
                                         {{ text_title if text_title else title }}
@@ -170,6 +174,9 @@
                             </div>
                         </div>
                     </div>
+                    {% if subtitle %}
+                        <p class="lead">{{ subtitle }}</p>
+                    {% endif %}
                 {% endif %}
 
                 {% block body %}{% endblock body %}
@@ -191,7 +198,8 @@
             <div class="me-auto d-flex">
                 <span class="h6 text-muted my-auto font-monospace small">Version
                     {% if current_user.is_authenticated %}
-                    <a href="https://github.com/jack-hermanson/chicken-coop-v2/commit/{{ commit }}" target="_blank">{{ commit }}</a>
+                        <a href="https://github.com/jack-hermanson/chicken-coop-v2/commit/{{ commit }}"
+                           target="_blank">{{ commit }}</a>
                     {% else %}
                         {{ commit }}
                     {% endif %}

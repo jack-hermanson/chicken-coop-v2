@@ -43,10 +43,11 @@ def create_app(config_class: Config = Config) -> Flask:
     migrate.init_app(app, db)
 
     # routes and blueprints
+    from application.modules.about.routes import about
     from application.modules.accounts.routes import accounts
     from application.modules.main.routes import main
 
-    for blueprint in [accounts, main]:
+    for blueprint in [accounts, main, about]:
         app.register_blueprint(blueprint)
 
     # login manager

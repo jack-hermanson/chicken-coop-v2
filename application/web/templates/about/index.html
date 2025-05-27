@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% set title = "About" %}
+{% set active_route = "about" %}
+{% set hide_title_row = True %}
+
+{#{% block subtitle %}#}
+{##}
+{#{% endblock subtitle %}#}
+
+{% block body %}
+    <div class="row">
+        <div class="col-12 col-lg-8">
+            <h1 class="display-2">Morey Chicken <span class="text-decoration-underline">Coop</span>erative</h1>
+            <p class="lead">Welcome to the Chicken Coop at the Morey Community Garden in Capitol Hill.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-lg-4">
+            <img src="{{ url_for("static", filename="images/cucumber.gif") }}" alt="Chickens eating a cucumber" class="img-fluid">
+        </div>
+    </div>
+{% endblock body %}

@@ -1,9 +1,9 @@
-{% macro nav_link(href, active, icon, text) %}
+{% macro nav_link(href, active, icon, text, class="") %}
     <a href="{{ href }}"
-       class="nav-link {% if active %}active{% endif %}">
+       class="nav-link {% if active %}active{% endif %} {{ class }}">
         <div class="row">
             <div class="col-auto text-center px-0 bg" style="min-width: 1.75rem">
-                <i class="fa-solid {{ icon }}"></i>
+                <i class="fa-lg fa-solid {{ icon }}"></i>
             </div>
             <div class="col">
                 {{ text }}
