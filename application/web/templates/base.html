@@ -19,6 +19,8 @@
     <meta name="og:image" content="{{ url_for('static', filename='images/chicken_og_tag_img.jpg', _external=True) }}">
     <meta name="og:description"
           content="The Morey Community Garden has a chicken coop/co-op. This is it!">
+    <meta property="og:type" content="website"/>
+    <meta property="og:logo" content="{{ url_for("images/favicon.png") }}"/>
     <script src="{{ url_for("static", filename="node_modules/htmx.org/dist/htmx.min.js") }}"></script>
 </head>
 <body class="d-flex flex-column min-vh-100">
@@ -160,7 +162,8 @@
                 {% if not hide_title_row %}
                     <div class="row">
                         <div class="col-12">
-                            <div class="page-title {% if subtitle %}mb-1{% else %}mb-3{% endif %} {% if title_row_no_border %}no-border-bottom{% endif %}">
+                            <div
+                                class="page-title {% if subtitle %}mb-1{% else %}mb-3{% endif %} {% if title_row_no_border %}no-border-bottom{% endif %}">
                                 <h2 class="mb-0">
                                     {% if title %}
                                         {{ text_title if text_title else title }}
