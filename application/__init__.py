@@ -1,6 +1,7 @@
 import logging
 import os
 import subprocess
+from typing import Type
 
 from flask import Flask, request
 from flask_bcrypt import Bcrypt
@@ -24,7 +25,7 @@ login_manager.login_view = "accounts.login"
 login_manager.login_message_category = "warning"
 
 
-def create_app(config_class: Config = Config) -> Flask:
+def create_app(config_class: type[Config] = Config) -> Flask:
     # create app, set static stuff up
     app = Flask(__name__, static_url_path="/static", static_folder="web/static", template_folder="web/templates")
 
@@ -72,7 +73,7 @@ def create_app(config_class: Config = Config) -> Flask:
             )
 
     logger.info("APPLICATION RUNNING, probably at http://localhost:5040")
-    flask_debug = bool(int(os.environ.get("FLASK_DEBUG")))
+    flask_debug = bool(int(os.environ.get("FLASK_DEBUG", "0")))
     logger.info(f"FLASK_DEBUG: '{flask_debug}'")
 
     return app
