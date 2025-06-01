@@ -94,6 +94,7 @@ dependencies = [
     { name = "psycopg2" },
     { name = "psycopg2-binary" },
     { name = "pytz" },
+    { name = "sqlalchemy" },
 ]
 
 [package.dev-dependencies]
@@ -117,6 +118,7 @@ requires-dist = [
     { name = "psycopg2", specifier = ">=2.9.10" },
     { name = "psycopg2-binary", specifier = ">=2.9.10" },
     { name = "pytz", specifier = ">=2025.2" },
+    { name = "sqlalchemy", specifier = ">=2.0.40" },
 ]
 
 [package.metadata.requires-dev]

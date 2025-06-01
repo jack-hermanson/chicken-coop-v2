@@ -8,6 +8,7 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, current_user
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import DeclarativeBase
 
 from application.modules.accounts.clearance_enum import ClearanceEnum
 from application.utils.crud_enum import CrudEnum
@@ -36,7 +37,8 @@ def create_app(config_class: type[Config] = Config) -> Flask:
     bcrypt.init_app(app)
 
     # models
-    import application.modules.accounts.models  # noqa: F401
+    import application.modules.accounts.models
+    import application.modules.ledger.models  # noqa: F401
 
     # database
     db.app = app
