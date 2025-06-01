@@ -48,9 +48,10 @@ def create_app(config_class: type[Config] = Config) -> Flask:
     # routes and blueprints
     from application.modules.about.routes import about
     from application.modules.accounts.routes import accounts
+    from application.modules.ledger.routes import ledger
     from application.modules.main.routes import main
 
-    for blueprint in [accounts, main, about]:
+    for blueprint in [accounts, main, about, ledger]:
         app.register_blueprint(blueprint)
 
     # login manager

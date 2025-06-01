@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% from "_macros/action_dropdown.html" import action_dropdown, action_dropdown_item, action_dropdown_separator %}
+
+{% set title = "Finances" %}
+{% set subtitle = "This is where we keep track of incomes and expenses." %}
+{% set active_route = "ledger" %}
+
+{% block actions %}
+	{% call action_dropdown() %}
+        {{ action_dropdown_item("Add Ledger Item", "#") }}
+        {{ action_dropdown_separator() }}
+        {{ action_dropdown_item("Export", "#") }}
+    {% endcall %}
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+
+    </div>
+{% endblock body %}
