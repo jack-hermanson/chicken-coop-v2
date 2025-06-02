@@ -1,13 +1,12 @@
 from datetime import date, datetime
 from decimal import Decimal
-from enum import IntEnum
 from typing import TYPE_CHECKING
 
 from pytz import utc
 from sqlalchemy import Date, DateTime, ForeignKey, Integer, Numeric, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from application import db
+from application import LedgerItemTypeEnum, db
 
 if TYPE_CHECKING:
     from application.modules.accounts.models import Account
@@ -17,16 +16,11 @@ def utcnow() -> datetime:
     return datetime.now(tz=utc)
 
 
-class LedgerItemType(IntEnum):
-    CREDIT = -1
-    DEBIT = 1
-
-
 class LedgerItem(db.Model):
     __tablename__ = "ledger_item"
 
     ledger_item_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-    ledger_item_type: Mapped[LedgerItemType] = mapped_column(Integer, nullable=False)
+    ledger_item_type: Mapped[LedgerItemTypeEnum] = mapped_column(Integer, nullable=False)
     ledger_item_date: Mapped[date] = mapped_column(Date, nullable=False)
     amount: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
     description: Mapped[str] = mapped_column(String(255), nullable=False)

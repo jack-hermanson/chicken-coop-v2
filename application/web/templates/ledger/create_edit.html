@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% from "_macros/action_dropdown.html" import action_dropdown, action_dropdown_item, action_dropdown_separator %}
+{% from "_macros/form.html" import form_group %}
+
+
+{% set title = "Add Ledger Item" %}
+{% set subtitle = "Add a new item to the ledger. This can be a credit (income) or debit (expense)." %}
+{% set active_route = "ledger" %}
+
+
+{% block body %}
+    <div class="row">
+        <div class="col">
+            <form action="{{ url_for(request.endpoint, **request.view_args) }}" method="POST">
+                {{ form.hidden_tag() }}
+                <div class="row col-12 col-lg-6">
+                    {{ form_group(form, name="ledger_item_type", required=True) }}
+                    {{ form_group(form, name="ledger_item_date", required=True) }}
+                    {{ form_group(form, name="amount", required=True) }}
+                    {{ form_group(form, name="description", required=True) }}
+                </div>
+                <div class="bottom-buttons">
+                    {{ form.submit(class="btn btn-success") }}
+                    <a href="{{ url_for(request.endpoint, **request.view_args) }}" class="btn btn-secondary">Reset</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock body %}

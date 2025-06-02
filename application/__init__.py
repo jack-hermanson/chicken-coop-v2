@@ -13,6 +13,7 @@ from sqlalchemy.orm import DeclarativeBase
 from application.modules.accounts.clearance_enum import ClearanceEnum
 from application.utils.crud_enum import CrudEnum
 from application.utils.get_ip import get_ip
+from application.utils.ledger_item_type_enum import LedgerItemTypeEnum
 from Config import Config
 from logger import logger
 
@@ -65,6 +66,7 @@ def create_app(config_class: type[Config] = Config) -> Flask:
             "environment": os.environ.get("ENVIRONMENT"),
             "ClearanceEnum": ClearanceEnum,
             "CrudEnum": CrudEnum,
+            "LedgerItemTypeEnum": LedgerItemTypeEnum,
         }
 
     @app.before_request

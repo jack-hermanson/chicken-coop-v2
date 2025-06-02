@@ -16,7 +16,7 @@ password_length = Length(min=4, max=4)
 email_length = Length(min=5, max=42)
 
 
-class CreateOrEditFormBase(FlaskForm):
+class CreateOrEditAccountFormBase(FlaskForm):
     """Just the base - inherit this in create and edit"""
 
     first_name = StringField(
@@ -84,7 +84,7 @@ class LoginForm(FlaskForm):
     #         raise ValidationError("Doesn't exist.")
 
 
-class CreateAccountForm(CreateOrEditFormBase):
+class CreateAccountForm(CreateOrEditAccountFormBase):
     password = PasswordField(
         "PIN",
         validators=[DataRequired(), password_length],
@@ -116,7 +116,7 @@ class CreateAccountForm(CreateOrEditFormBase):
 
 # if we allowed editing name, then CreateOrEditFormBase will be used, until then don't inherit
 # class EditAccountForm(CreateOrEditFormBase):
-class EditAccountForm(CreateOrEditFormBase):
+class EditAccountForm(CreateOrEditAccountFormBase):
     password = PasswordField(
         "PIN",
         validators=[password_length],
