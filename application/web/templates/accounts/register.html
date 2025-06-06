@@ -9,14 +9,7 @@
         <div class="col">
             <form novalidate action="{{ url_for("accounts.register") }}" method="POST">
                 {{ form.hidden_tag() }}
-                <div class="row">
-                    <div class="col-12 col-lg-6">
-                        {{ form_group(form, name="first_name", required=True) }}
-                    </div>
-                    <div class="col-12 col-lg-6">
-                        {{ form_group(form, name="last_name", required=True) }}
-                    </div>
-                </div>
+                {{ form_group(form, name="name", required=True) }}
                 {{ form_group(form, name="email", required=True) }}
                 {{ form_group(form, name="username", required=True) }}
                 {{ form_group(form, name="password", required=True) }}

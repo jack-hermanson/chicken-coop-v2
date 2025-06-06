@@ -81,7 +81,7 @@
                     <hr class="my-2">
                     {{ nav_link(href="#", active=(active_route == "help"), icon="fa-question", text="Help") }}
                     {% if current_user.is_authenticated %}
-                        {{ nav_link(href=url_for('accounts.me'), active=(active_route == "accounts"), icon="fa-user", text=(current_user.first_name)) }}
+                        {{ nav_link(href=url_for('accounts.me'), active=(active_route == "accounts"), icon="fa-user", text=(current_user.name)) }}
                     {% else %}
                         {{ nav_link(href=url_for('accounts.login'), active=(active_route == "accounts"), icon="fa-user", text="Login") }}
                     {% endif %}

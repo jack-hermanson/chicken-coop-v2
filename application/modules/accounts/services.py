@@ -19,9 +19,8 @@ def register(form: CreateAccountForm) -> Account:
     account.username = form.username.data.lower().strip()
     account.password = hashed_password
     account.email = form.email.data.lower().strip()
-    account.clearance = ClearanceEnum.UNVERIFIED
-    account.first_name = form.first_name.data.strip()
-    account.last_name = form.last_name.data.strip()
+    account.clearance = ClearanceEnum.NORMAL  # todo - change to unverified later
+    account.name = form.name.data.strip()
     db.session.add(account)
     db.session.commit()
     return account
@@ -30,8 +29,7 @@ def register(form: CreateAccountForm) -> Account:
 def get_edit_form() -> EditAccountForm:
     form = EditAccountForm()
     form.username.data = current_user.username
-    form.first_name.data = current_user.first_name
-    form.last_name.data = current_user.last_name
+    form.name.data = current_user.name
     form.email.data = current_user.email
     return form
 
@@ -44,7 +42,7 @@ def log_user_in(form: LoginForm) -> bool:
         formatted_last_login = (
             utc_to_local(last_login).strftime("%a %d %b %Y, %I:%M%p") if account.last_login is not None else "never"
         )
-        flash(f"Welcome back, {account.first_name}. Your last login was {formatted_last_login}.", "info")
+        flash(f"Welcome back, {account.name}. Your last login was {formatted_last_login}.", "info")
         current_user.last_login = datetime.now(tz=UTC)
         db.session.commit()
         return True
@@ -63,8 +61,7 @@ def edit_my_account(form: EditAccountForm) -> bool:
     # Uniqueness of username and email has already been checked.
     account.username = form.username.data.lower().strip()
     account.email = form.email.data.lower().strip()
-    account.first_name = form.first_name.data.strip()
-    account.last_name = form.last_name.data.strip()
+    account.name = form.name.data.strip()
     if form.password.data and form.confirm_password.data:
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode("utf-8")
         account.password = hashed_password
@@ -75,5 +72,5 @@ def edit_my_account(form: EditAccountForm) -> bool:
 
 
 def get_all_accounts() -> list[Account]:
-    accounts: list[Account] = Account.query.order_by(Account.first_name).all()
+    accounts: list[Account] = Account.query.order_by(Account.name).all()
     return accounts

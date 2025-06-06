@@ -34,7 +34,7 @@ def logout() -> ResponseReturnValue:
         flash("You are not logged in, so you cannot log out!", "danger")
         return redirect(url_for("accounts.login"))
 
-    name = current_user.first_name
+    name = current_user.name
     logout_user()
     flash(f"Goodbye, {name}.", "info")
     return redirect(url_for("main.index"))
@@ -65,7 +65,7 @@ def edit() -> ResponseReturnValue:
 @accounts.route("/me")
 @login_required
 def me() -> ResponseReturnValue:
-    return render_template("accounts/me.html", title=f"{current_user.first_name} {current_user.last_name}")
+    return render_template("accounts/me.html", title=f"{current_user.name}")
 
 
 @accounts.route("/change-password", methods=["POST"])

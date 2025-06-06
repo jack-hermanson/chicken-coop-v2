@@ -12,7 +12,7 @@
 {% block breadcrumbs %}
     {{ breadcrumbs(
         crumbs=[
-            (url_for("accounts.me"), current_user.first_name),
+            (url_for("accounts.me"), current_user.name),
             (url_for("accounts.edit"), "Edit")
         ]
     )}}
@@ -25,14 +25,7 @@
                 {{ form.hidden_tag() }}
                 <fieldset>
                     <legend>Account Information</legend>
-                    <div class="row">
-                        <div class="col-12 col-lg-6">
-                            {{ form_group(form, name="first_name", required=True) }}
-                        </div>
-                        <div class="col-12 col-lg-6">
-                            {{ form_group(form, name="last_name", required=True) }}
-                        </div>
-                    </div>
+                    {{ form_group(form, name="name", required=True) }}
                     {{ form_group(form, name="email") }}
                     {{ form_group(form, name="username", required=True) }}
                 </fieldset>
@@ -40,7 +33,8 @@
                     <legend>Password</legend>
                     <div class="bd-callout bd-callout-success">
                         <p class="mb-0">If you don't want to change your password, then just leave the password fields
-                            blank.</p>
+                            blank.
+                        </p>
                     </div>
 
                     {{ form_group(form, name="password") }}

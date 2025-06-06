@@ -51,8 +51,7 @@ def get_ledger_items(sort_and_filter_params: SortAndFilterParams) -> list[Ledger
         )
     if sort_and_filter_params.order_by == "user":
         query = query.order_by(
-            Account.first_name.desc() if sort_and_filter_params.desc else Account.first_name,
-            Account.last_name.desc() if sort_and_filter_params.desc else Account.last_name,
+            Account.name.desc() if sort_and_filter_params.desc else Account.name,
             LedgerItem.ledger_item_date.desc() if sort_and_filter_params.desc else LedgerItem.ledger_item_date,
         )
 
@@ -77,7 +76,7 @@ def get_ledger_items(sort_and_filter_params: SortAndFilterParams) -> list[Ledger
                 current_ledger_item.ledger_item_date,
                 current_ledger_item.amount,
                 current_ledger_item.description,
-                created_by_user=f"{current_ledger_item.account.first_name} {current_ledger_item.account.last_name}",
+                created_by_user=current_ledger_item.account.name,
                 balance=Decimal(balance),
             ),
         )

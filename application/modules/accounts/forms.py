@@ -4,14 +4,13 @@ from flask_login import current_user
 from flask_wtf import FlaskForm
 from sqlalchemy import and_, func
 from wtforms import BooleanField, PasswordField, StringField, SubmitField
-from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
+from wtforms.validators import DataRequired, Email, EqualTo, Length, Optional, ValidationError
 
 from application.modules.accounts.models import Account
 from application.utils.form_filters import lowercase
 
 username_length = Length(min=2, max=24)
-first_name_length = Length(min=2, max=16)
-last_name_length = Length(min=2, max=24)
+name_length = Length(min=2, max=32)
 password_length = Length(min=4, max=4)
 email_length = Length(min=5, max=42)
 
@@ -19,19 +18,14 @@ email_length = Length(min=5, max=42)
 class CreateOrEditAccountFormBase(FlaskForm):
     """Just the base - inherit this in create and edit"""
 
-    first_name = StringField(
-        "First Name",
-        validators=[DataRequired(), first_name_length],
+    name = StringField(
+        "Name",
+        validators=[DataRequired(), name_length],
         render_kw={
             "autofocus": "true",
             "spellcheck": "false",
             "autocorrect": "off",
         },
-    )
-    last_name = StringField(
-        "Last Name",
-        validators=[DataRequired(), last_name_length],
-        render_kw={"spellcheck": "false", "autocorrect": "off"},
     )
     email = StringField(
         "Email",
@@ -119,7 +113,7 @@ class CreateAccountForm(CreateOrEditAccountFormBase):
 class EditAccountForm(CreateOrEditAccountFormBase):
     password = PasswordField(
         "PIN",
-        validators=[password_length],
+        validators=[Optional(), password_length],
         render_kw={"inputmode": "numeric", "pattern": "[0-9]*"},
     )
     confirm_password = PasswordField(
