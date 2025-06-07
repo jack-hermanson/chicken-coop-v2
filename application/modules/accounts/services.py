@@ -1,5 +1,5 @@
 import time
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 
 from flask import flash
 from flask_login import current_user, login_user
@@ -37,7 +37,7 @@ def get_edit_form() -> EditAccountForm:
 def log_user_in(form: LoginForm) -> bool:
     account: Account = Account.query.filter(func.lower(Account.username) == func.lower(form.username.data)).first()
     if account and bcrypt.check_password_hash(account.password, form.password.data):
-        login_user(account, remember=form.remember.data)
+        login_user(account, remember=True, duration=timedelta(days=99))
         last_login: datetime = account.last_login
         formatted_last_login = (
             utc_to_local(last_login).strftime("%a %d %b %Y, %I:%M%p") if account.last_login is not None else "never"

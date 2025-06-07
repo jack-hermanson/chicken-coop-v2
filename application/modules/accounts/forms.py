@@ -3,7 +3,7 @@ from __future__ import annotations
 from flask_login import current_user
 from flask_wtf import FlaskForm
 from sqlalchemy import and_, func
-from wtforms import BooleanField, PasswordField, StringField, SubmitField
+from wtforms import PasswordField, StringField, SubmitField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, Optional, ValidationError
 
 from application.modules.accounts.models import Account
@@ -69,7 +69,7 @@ class LoginForm(FlaskForm):
         validators=[DataRequired(), password_length],
         render_kw={"inputmode": "numeric", "pattern": "[0-9]*"},
     )
-    remember = BooleanField("Remember Me", default=True)
+    # remember = BooleanField("Remember Me", default=True)
     submit = SubmitField("Log In")
 
     # @staticmethod
