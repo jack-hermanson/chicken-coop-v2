@@ -19,84 +19,85 @@
 {% block body %}
     <div class="row">
         <div class="col">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    {#  todo sort on columns #}
-                    <th scope="col">ID</th>
-                    <th scope="col">
-                        <a href="{{ url_for("ledger.index", order_by="date", desc=(not sort_and_filter_params.desc)) }}">
-                            Date
-                            {% if sort_and_filter_params.order_by == "date" %}
-                                {% if sort_and_filter_params.desc %}
-                                    &uarr;
-                                {% else %}
-                                    &darr;
-                                {% endif %}
-                            {% endif %}
-                        </a>
-                    </th>
-                    <th scope="col">
-                        <a href="{{ url_for("ledger.index", order_by="amount", desc=(not sort_and_filter_params.desc)) }}">
-                            Amount ($)
-                            {% if sort_and_filter_params.order_by == "amount" %}
-                                {% if sort_and_filter_params.desc %}
-                                    &uarr;
-                                {% else %}
-                                    &darr;
-                                {% endif %}
-                            {% endif %}
-                        </a>
-                    </th>
-                    <th scope="col">New Balance ($)</th>
-                    <th scope="col">Description</th>
-                    <th scope="col">
-                        <a href="{{ url_for("ledger.index", order_by="user", desc=(not sort_and_filter_params.desc)) }}">
-                            User
-                            {% if sort_and_filter_params.order_by == "user" %}
-                                {% if sort_and_filter_params.desc %}
-                                    &uarr;
-                                {% else %}
-                                    &darr;
-                                {% endif %}
-                            {% endif %}
-                        </a>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for ledger_item in ledger_items %}
+            <div class="table-responsive-lg">
+                <table class="table table-striped">
+                    <thead>
                     <tr>
-                        <td>
-                            {% if current_user.clearance >= ClearanceEnum.ADMIN %}
-                                <a href="{{ url_for("ledger.edit", ledger_item_id=ledger_item.ledger_item_id) }}">
-                                    {{ ledger_item.ledger_item_id }}
-                                </a>
-                            {% else %}
-                                {{ ledger_item.ledger_item_id }}
-                            {% endif %}
-                        </td>
-                        <td>{{ ledger_item.ledger_item_date }}</td>
-{#
-
-                        {# AMOUNT #}
-                        <td class="font-monospace">
-                            <span class="badge fs-6 bg-{% if ledger_item.ledger_item_type == LedgerItemTypeEnum.DEBIT %}danger{% else %}success{% endif %}">
-                                {{ "%.2f"|format(ledger_item.amount) }}
-                            </span>
-                        </td>
-                        {# BALANCE #}
-                        <td class="font-monospace">
-                            {{ "%.2f"|format(ledger_item.balance) }}
-                        </td>
-
-                        <td>{{ ledger_item.description }}</td>
-                        <td>{{ ledger_item.created_by_user }}</td>
-
+                        <th scope="col">ID</th>
+                        <th scope="col">
+                            <a href="{{ url_for("ledger.index", order_by="date", desc=(not sort_and_filter_params.desc)) }}">
+                                Date
+                                {% if sort_and_filter_params.order_by == "date" %}
+                                    {% if sort_and_filter_params.desc %}
+                                        &uarr;
+                                    {% else %}
+                                        &darr;
+                                    {% endif %}
+                                {% endif %}
+                            </a>
+                        </th>
+                        <th scope="col">
+                            <a href="{{ url_for("ledger.index", order_by="amount", desc=(not sort_and_filter_params.desc)) }}">
+                                Amount ($)
+                                {% if sort_and_filter_params.order_by == "amount" %}
+                                    {% if sort_and_filter_params.desc %}
+                                        &uarr;
+                                    {% else %}
+                                        &darr;
+                                    {% endif %}
+                                {% endif %}
+                            </a>
+                        </th>
+                        <th scope="col">New Balance ($)</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">
+                            <a href="{{ url_for("ledger.index", order_by="user", desc=(not sort_and_filter_params.desc)) }}">
+                                User
+                                {% if sort_and_filter_params.order_by == "user" %}
+                                    {% if sort_and_filter_params.desc %}
+                                        &uarr;
+                                    {% else %}
+                                        &darr;
+                                    {% endif %}
+                                {% endif %}
+                            </a>
+                        </th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {% for ledger_item in ledger_items %}
+                        <tr>
+                            <td>
+                                {% if current_user.clearance >= ClearanceEnum.ADMIN %}
+                                    <a href="{{ url_for("ledger.edit", ledger_item_id=ledger_item.ledger_item_id) }}">
+                                        {{ ledger_item.ledger_item_id }}
+                                    </a>
+                                {% else %}
+                                    {{ ledger_item.ledger_item_id }}
+                                {% endif %}
+                            </td>
+                            <td>{{ ledger_item.ledger_item_date }}</td>
+    {#
+
+                            {# AMOUNT #}
+                            <td class="font-monospace">
+                                <span class="badge fs-6 bg-{% if ledger_item.ledger_item_type == LedgerItemTypeEnum.DEBIT %}danger{% else %}success{% endif %}">
+                                    {{ "%.2f"|format(ledger_item.amount) }}
+                                </span>
+                            </td>
+                            {# BALANCE #}
+                            <td class="font-monospace">
+                                {{ "%.2f"|format(ledger_item.balance) }}
+                            </td>
+
+                            <td>{{ ledger_item.description }}</td>
+                            <td>{{ ledger_item.created_by_user }}</td>
+
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 {% endblock body %}

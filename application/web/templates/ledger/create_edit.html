@@ -3,10 +3,24 @@
 {% from "_macros/action_dropdown.html" import action_dropdown, action_dropdown_item, action_dropdown_separator %}
 {% from "_macros/form.html" import form_group %}
 
-
-{% set title = "Add Ledger Item" %}
-{% set subtitle = "Add a new item to the ledger. This can be a credit (income) or debit (expense)." %}
+{% if mode == CrudEnum.CREATE %}
+    {% set title = "Create Ledger Item" %}
+    {% set subtitle = "Add a new item to the ledger. This can be a credit (income) or debit (expense)." %}
+{% elif mode == CrudEnum.UPDATE %}
+    {% set title = "Edit Ledger Item" %}
+    {% set subtitle = "Make changes to this item in the ledger." %}
+{% endif %}
 {% set active_route = "ledger" %}
+
+{% block actions %}
+    {% if mode == CrudEnum.UPDATE %}
+        {% call action_dropdown() %}
+            {{ action_dropdown_item("Delete", "#") }}
+        {% endcall %}
+    {% endif %}
+{% endblock %}
+
+
 
 
 {% block body %}
