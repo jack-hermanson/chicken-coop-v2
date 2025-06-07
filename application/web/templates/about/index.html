@@ -7,14 +7,45 @@
 
 {% block body %}
     <div class="row">
-        <div class="col-12 col-lg-8">
-            <h1 class="display-2">Morey Chicken <span class="text-decoration-underline">Coop</span>erative</h1>
-            <p class="lead">Welcome to the Chicken Coop at the Morey Community Garden in Capitol Hill.</p>
+        <div class="col">
+            <div class="d-none d-lg-block">
+                <h1 class="display-2">Morey Chicken <span class="text-decoration-underline">Coop</span>erative</h1>
+            </div>
+            <div class="d-block d-lg-none">
+                <h1>Morey Chicken <span class="text-decoration-underline">Coop</span>erative</h1>
+            </div>
+            <p class="lead">
+                These chickens are cared for by a team of volunteers in Capitol Hill. We’re not chicken experts yet - we’re learning as we go!
+            </p>
         </div>
     </div>
     <div class="row">
-        <div class="col-12 col-lg-4">
-            <img src="{{ url_for("static", filename="images/cucumber.gif") }}" alt="Chickens eating a cucumber" class="img-fluid">
+        <div class="col-9 col-md-6 col-lg-4">
+            <img src="{{ url_for("static", filename="images/chicken-people.jpg") }}" alt="People standing in front of the chicken coop" class="img-fluid">
+{#            <img src="{{ url_for("static", filename="images/cucumber.gif") }}" alt="Chickens eating a cucumber" class="img-fluid">#}
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col">
+            <p>Here's how you can get involved:</p>
+
+            {% include "support/_partials/donate.html" %}
+
+
+            <h2>Join</h2>
+            <p class="mb-1">
+                Volunteer to care for the chickens one morning or evening a week - no experience required!
+            </p>
+            <ul>
+                <li>
+                    Email us at
+                    <a href="mailto:moreychickencoop@gmail.com">moreychickencoop@gmail.com</a>
+                    to let us know you’re interested.
+                </li>
+                <li>
+                    If no shifts are available, we’ll add you to our waitlist.
+                </li>
+            </ul>
         </div>
     </div>
 {% endblock body %}

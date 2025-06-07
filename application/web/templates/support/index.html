@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% set title = "Support" %}
+{% set subtitle = "Our chicken cooperative is definitely not a money-making enterprise. Any support helps a lot!" %}
+{% set active_route = "support" %}
+{#{% set hide_title_row = True %}#}
+
+
+
+{% block body %}
+    <div class="row">
+        <div class="col-12 col-lg-8">
+            <h2>Why support?</h2>
+            <p>
+                We believe this chicken cooperative is a positive addition to the community and can
+                set an example for other people who are interested in taking care of chickens.
+                We need financial support in order to give our chickens high-quality food, enrichment, and equipment.
+                Also, if there's an emergency, we want to make sure the chickens have access to veterinary care.
+            </p>
+
+            {% include "support/_partials/donate.html" %}
+
+            <h2>Thank you!</h2>
+            <p>
+                This cooperative is run entirely by volunteers
+                who often use their own personal funds to support the chickens.
+                Your donation goes directly to the chickens in the form of food,
+                fresh pine shavings, and other necessities.
+            </p>
+
+
+        </div>
+    </div>
+    <div class="row">
+    <div class="col-9 col-lg-4">
+        <img src="{{ url_for("static", filename="images/cucumber.gif") }}" alt="Chickens eating a cucumber" class="img-fluid">
+    </div>
+    </div>
+{% endblock body %}

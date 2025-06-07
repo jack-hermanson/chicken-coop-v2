@@ -7,8 +7,11 @@
 
 
 {% block body %}
-    <p>This is the "me" page for:</p>
-    <p>{{ current_user.name }}</p>
+    <p>This is the "me" page for <b>{{ current_user.name }}</b>.</p>
+    <p>
+        There will be more stuff here in the future. To edit your account or log out, use the actions
+        menu in the top right corner of the screen.
+    </p>
 {% endblock body %}
 
 {% block actions %}

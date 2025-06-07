@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, redirect, render_template, url_for
 from flask.typing import ResponseReturnValue
 from flask_login import current_user
 
@@ -13,3 +13,8 @@ def index() -> ResponseReturnValue:
         logger.debug("Not logged in / verified - showing about page instead of dashboard")
         return render_template("about/index.html")
     return render_template("main/index.html")
+
+
+@main.route("/info")
+def info() -> ResponseReturnValue:
+    return redirect(url_for("about.index"), code=301)

@@ -16,11 +16,13 @@ $container-max-widths: (
 );
 
 
-// Import custom colors first
+// Import custom colors and stuff first
 @import "colors";
 @import "fonts";
+@import "typography";
 
-// Import Bootstrap's SCSS files after custom colors
+
+// Import Bootstrap's SCSS files after custom colors and stuff
 @import "../node_modules/bootstrap/scss/functions";
 @import "../node_modules/bootstrap/scss/variables";
 @import "../node_modules/bootstrap/scss/bootstrap";

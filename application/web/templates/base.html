@@ -63,8 +63,8 @@
             <div class="container-fluid pt-0">
                 <nav class="nav nav-pills flex-column h-100">
                     {{ nav_link(href=url_for("about.index"), active=(active_route == "about"), icon="fa-egg", text="About / FAQs") }}
-                    {{ nav_link(href="#", active=(active_route == "support"), icon="fa-hand-holding-heart", text="Support the Chickens") }}
-                    {{ nav_link(href="#", active=(active_route == "contact"), icon="fa-comments", text="Contact Us") }}
+                    {{ nav_link(href=url_for("support.index"), active=(active_route == "support"), icon="fa-hand-holding-heart", text="Support the Chickens") }}
+{#                    {{ nav_link(href="#", active=(active_route == "contact"), icon="fa-comments", text="Contact Us") }}#}
 
 
                     {% if current_user.is_authenticated and current_user.clearance >= ClearanceEnum.NORMAL %}
@@ -79,7 +79,7 @@
                         {{ nav_link(href="#", active=(active_route == "admin"), icon="fa-cog", text="Admin") }}
                     {% endif %}
                     <hr class="my-2">
-                    {{ nav_link(href="#", active=(active_route == "help"), icon="fa-question", text="Help") }}
+                    {{ nav_link(href=url_for("help.index"), active=(active_route == "help"), icon="fa-question", text="Help") }}
                     {% if current_user.is_authenticated %}
                         {{ nav_link(href=url_for('accounts.me'), active=(active_route == "accounts"), icon="fa-user", text=(current_user.name)) }}
                     {% else %}
@@ -164,11 +164,11 @@
                         <div class="col-12">
                             <div
                                 class="page-title {% if subtitle %}mb-1{% else %}mb-3{% endif %} {% if title_row_no_border %}no-border-bottom{% endif %}">
-                                <h2 class="mb-0">
+                                <h1 class="mb-0">
                                     {% if title %}
                                         {{ text_title if text_title else title }}
                                     {% endif %}
-                                </h2>
+                                </h1>
                                 <div class="actions">
                                     {% block actions %}
 

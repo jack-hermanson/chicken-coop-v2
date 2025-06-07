@@ -46,13 +46,18 @@ def create_app(config_class: type[Config] = Config) -> Flask:
     db.init_app(app)
     migrate.init_app(app, db)
 
+    # Don't worry about trailing slashes
+    app.url_map.strict_slashes = False
+
     # routes and blueprints
     from application.modules.about.routes import about
     from application.modules.accounts.routes import accounts
+    from application.modules.help.routes import help  # noqa: A004
     from application.modules.ledger.routes import ledger
     from application.modules.main.routes import main
+    from application.modules.support.routes import support
 
-    for blueprint in [accounts, main, about, ledger]:
+    for blueprint in [accounts, main, about, ledger, help, support]:
         app.register_blueprint(blueprint)
 
     # login manager
