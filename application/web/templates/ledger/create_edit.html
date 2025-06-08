@@ -2,6 +2,7 @@
 
 {% from "_macros/action_dropdown.html" import action_dropdown, action_dropdown_item, action_dropdown_separator %}
 {% from "_macros/form.html" import form_group %}
+{% from "_macros/delete_modal.html" import delete_modal %}
 
 {% if mode == CrudEnum.CREATE %}
     {% set title = "Create Ledger Item" %}
@@ -15,7 +16,11 @@
 {% block actions %}
     {% if mode == CrudEnum.UPDATE %}
         {% call action_dropdown() %}
-            {{ action_dropdown_item("Delete", "#") }}
+            <li>
+                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#delete-ledger-item">Delete</button>
+            </li>
+
+            {#            {{ action_dropdown_item("Delete", "#") }}#}
         {% endcall %}
     {% endif %}
 {% endblock %}
@@ -42,3 +47,12 @@
         </div>
     </div>
 {% endblock body %}
+
+
+{% block modals %}
+	{% call delete_modal(title="Delete Ledger Item", id="delete-ledger-item", url=url_for("ledger.delete", ledger_item_id=form.ledger_item_id.data)) %}
+        <p class="mb-0">
+            Are you sure you want to delete this ledger item?
+        </p>
+    {% endcall %}
+{% endblock modals %}
