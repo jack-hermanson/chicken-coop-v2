@@ -1,4 +1,6 @@
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from typing import TYPE_CHECKING
+
+from flask import Blueprint, Response, flash, redirect, render_template, request, url_for
 from flask.typing import ResponseReturnValue
 
 from application import ClearanceEnum, CrudEnum
@@ -9,9 +11,13 @@ from application.modules.ledger.services import (
     delete_ledger_item,
     edit_ledger_item,
     get_ledger_items,
+    ledger_items_to_csv,
     prefill_edit_ledger_item_form_values,
 )
 from application.utils.sort_and_filter_params import SortAndFilterParams
+
+if TYPE_CHECKING:
+    from application.modules.ledger.view_models import LedgerItemViewModel
 
 ledger = Blueprint("ledger", __name__, url_prefix="/ledger")
 
@@ -20,7 +26,12 @@ ledger = Blueprint("ledger", __name__, url_prefix="/ledger")
 @requires_clearance(ClearanceEnum.NORMAL)
 def index() -> ResponseReturnValue:
     sort_and_filter_params = SortAndFilterParams()
-    ledger_items = get_ledger_items(sort_and_filter_params)
+    ledger_items: list[LedgerItemViewModel] = get_ledger_items(sort_and_filter_params)
+
+    if (request.args.get("csv") or "").lower() == "true":
+        csv_str = ledger_items_to_csv(ledger_items)
+        return Response(csv_str, mimetype="text/plain")
+
     return render_template(
         "ledger/index.html",
         ledger_items=ledger_items,

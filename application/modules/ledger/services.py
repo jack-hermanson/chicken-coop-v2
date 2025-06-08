@@ -1,3 +1,5 @@
+import csv
+import io
 from decimal import Decimal
 
 from flask_login import current_user
@@ -82,6 +84,26 @@ def get_ledger_items(sort_and_filter_params: SortAndFilterParams) -> list[Ledger
         )
 
     return result
+
+
+def ledger_items_to_csv(ledger_items: list[LedgerItemViewModel]) -> str:
+    output = io.StringIO()
+    writer = csv.writer(output, quoting=csv.QUOTE_ALL)
+
+    headers = ["ledger_item_id", "date", "amount", "new_balance", "description", "user"]
+    writer.writerow(headers)
+
+    for row in ledger_items:
+        data = [
+            f"{row.ledger_item_id}",
+            row.ledger_item_date.strftime("%-m/%-d/%y"),
+            f"{row.amount:.2f}",
+            f"{row.balance:.2f}",
+            row.description,
+            row.created_by_user,
+        ]
+        writer.writerow(data)
+    return output.getvalue()
 
 
 def prefill_edit_ledger_item_form_values(form: CreateEditLedgerItemForm, ledger_item_id: int) -> None:

@@ -12,14 +12,14 @@
             {{ action_dropdown_item("Add Ledger Item", url_for("ledger.create")) }}
             {{ action_dropdown_separator() }}
         {% endif %}
-        {{ action_dropdown_item("Export", "#") }}
+        {{ action_dropdown_item("Export", url_for("ledger.index", csv=True)) }}
     {% endcall %}
 {% endblock %}
 
 {% block body %}
     <div class="row">
         <div class="col">
-            <div class="table-responsive">
+            <div class="table-responsive-sm" style="max-width: 94vw;">
                 <table class="table table-striped">
                     <thead>
                     <tr>
@@ -48,7 +48,7 @@
                                 {% endif %}
                             </a>
                         </th>
-                        <th scope="col">New Balance ($)</th>
+                        <th scope="col">New Balance&nbsp;($)</th>
                         <th scope="col">Description</th>
                         <th scope="col" class="text-nowrap">
                             <a href="{{ url_for("ledger.index", order_by="user", desc=(not sort_and_filter_params.desc)) }}">
