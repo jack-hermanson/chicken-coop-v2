@@ -19,12 +19,12 @@
 {% block body %}
     <div class="row">
         <div class="col">
-            <div class="table-responsive-lg" style="max-width: 94vw;">
+            <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
                     <tr>
                         <th scope="col">ID</th>
-                        <th scope="col">
+                        <th scope="col" class="text-nowrap">
                             <a href="{{ url_for("ledger.index", order_by="date", desc=(not sort_and_filter_params.desc)) }}">
                                 Date
                                 {% if sort_and_filter_params.order_by == "date" %}
@@ -36,7 +36,7 @@
                                 {% endif %}
                             </a>
                         </th>
-                        <th scope="col">
+                        <th scope="col" class="text-nowrap">
                             <a href="{{ url_for("ledger.index", order_by="amount", desc=(not sort_and_filter_params.desc)) }}">
                                 Amount ($)
                                 {% if sort_and_filter_params.order_by == "amount" %}
@@ -50,7 +50,7 @@
                         </th>
                         <th scope="col">New Balance ($)</th>
                         <th scope="col">Description</th>
-                        <th scope="col">
+                        <th scope="col" class="text-nowrap">
                             <a href="{{ url_for("ledger.index", order_by="user", desc=(not sort_and_filter_params.desc)) }}">
                                 User
                                 {% if sort_and_filter_params.order_by == "user" %}
@@ -76,7 +76,7 @@
                                     {{ ledger_item.ledger_item_id }}
                                 {% endif %}
                             </td>
-                            <td>{{ ledger_item.ledger_item_date }}</td>
+                            <td>{{ ledger_item.ledger_item_date.strftime("%-m/%-d/%y") }}</td>
     {#
 
                             {# AMOUNT #}
