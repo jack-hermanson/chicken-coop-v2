@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% from "_macros/action_dropdown.html" import action_dropdown, action_dropdown_item, action_dropdown_separator %}
+{% from "_macros/action_dropdown.html" import action_dropdown, action_dropdown_item, action_dropdown_separator, action_dropdown_modal_toggle %}
 {% from "_macros/form.html" import form_group %}
 {% from "_macros/delete_modal.html" import delete_modal %}
 
@@ -16,11 +16,7 @@
 {% block actions %}
     {% if mode == CrudEnum.UPDATE %}
         {% call action_dropdown() %}
-            <li>
-                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#delete-ledger-item">Delete</button>
-            </li>
-
-            {#            {{ action_dropdown_item("Delete", "#") }}#}
+            {{ action_dropdown_modal_toggle("Delete", "#delete-ledger-item") }}
         {% endcall %}
     {% endif %}
 {% endblock %}
