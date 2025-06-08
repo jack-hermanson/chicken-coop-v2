@@ -46,9 +46,11 @@
 
 
 {% block modals %}
-	{% call delete_modal(title="Delete Ledger Item", id="delete-ledger-item", url=url_for("ledger.delete", ledger_item_id=form.ledger_item_id.data)) %}
-        <p class="mb-0">
-            Are you sure you want to delete this ledger item?
-        </p>
-    {% endcall %}
+    {% if mode == CrudEnum.UPDATE %}
+        {% call delete_modal(title="Delete Ledger Item", id="delete-ledger-item", url=url_for("ledger.delete", ledger_item_id=form.ledger_item_id.data)) %}
+            <p class="mb-0">
+                Are you sure you want to delete this ledger item?
+            </p>
+        {% endcall %}
+    {% endif %}
 {% endblock modals %}
