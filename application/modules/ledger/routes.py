@@ -57,6 +57,7 @@ def edit(ledger_item_id: int) -> ResponseReturnValue:
 @ledger.route("/delete/<int:ledger_item_id>", methods=["POST"])
 @requires_clearance(ClearanceEnum.ADMIN)
 def delete(ledger_item_id: int) -> ResponseReturnValue:
+    # theoretically I should be using a form and validating CSRF token, shouldn't really be necessary here
     delete_ledger_item(ledger_item_id)
     flash("Ledger item deleted successfully.", "success")
     return redirect(url_for("ledger.index"))

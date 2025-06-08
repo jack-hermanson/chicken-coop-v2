@@ -88,9 +88,9 @@ def prefill_edit_ledger_item_form_values(form: CreateEditLedgerItemForm, ledger_
     ledger_item = LedgerItem.query.get_or_404(ledger_item_id)
     form.ledger_item_id.data = ledger_item.ledger_item_id
     form.ledger_item_type.data = ledger_item.ledger_item_type
+    form.amount.data = abs(ledger_item.amount)
     form.description.data = ledger_item.description
     form.ledger_item_date.data = ledger_item.ledger_item_date
-    form.amount.data = ledger_item.amount
 
 
 def _set_ledger_item_from_form(form: CreateEditLedgerItemForm, ledger_item: LedgerItem) -> None:
