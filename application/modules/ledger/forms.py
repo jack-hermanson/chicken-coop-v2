@@ -29,6 +29,7 @@ class CreateEditLedgerItemForm(FlaskForm):
             ),
             DataRequired(),
         ],
+        default=LedgerItemTypeEnum.CREDIT,
     )
     ledger_item_date = DateField("Ledger Item Date", validators=[DataRequired()], default=date.today)
     amount = DecimalField("Amount", validators=[DataRequired(), NumberRange(min=0, max=10_000)])

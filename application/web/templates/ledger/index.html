@@ -19,7 +19,7 @@
 {% block body %}
     <div class="row">
         <div class="col">
-            <div class="table-responsive-sm" style="max-width: 94vw;">
+            <div class="table-responsive-sm">
                 <table class="table table-striped">
                     <thead>
                     <tr>
@@ -36,6 +36,7 @@
                                 {% endif %}
                             </a>
                         </th>
+                        <th scope="col">Description</th>
                         <th scope="col" class="text-nowrap">
                             <a href="{{ url_for("ledger.index", order_by="amount", desc=(not sort_and_filter_params.desc)) }}">
                                 Amount ($)
@@ -49,19 +50,21 @@
                             </a>
                         </th>
                         <th scope="col">New Balance&nbsp;($)</th>
-                        <th scope="col">Description</th>
-                        <th scope="col" class="text-nowrap">
-                            <a href="{{ url_for("ledger.index", order_by="user", desc=(not sort_and_filter_params.desc)) }}">
-                                User
-                                {% if sort_and_filter_params.order_by == "user" %}
-                                    {% if sort_and_filter_params.desc %}
-                                        &uarr;
-                                    {% else %}
-                                        &darr;
+
+                        {% if current_user.clearance >= ClearanceEnum.ADMIN %}
+                            <th scope="col" class="text-nowrap">
+                                <a href="{{ url_for("ledger.index", order_by="user", desc=(not sort_and_filter_params.desc)) }}">
+                                    User
+                                    {% if sort_and_filter_params.order_by == "user" %}
+                                        {% if sort_and_filter_params.desc %}
+                                            &uarr;
+                                        {% else %}
+                                            &darr;
+                                        {% endif %}
                                     {% endif %}
-                                {% endif %}
-                            </a>
-                        </th>
+                                </a>
+                            </th>
+                        {% endif %}
                     </tr>
                     </thead>
                     <tbody>
@@ -77,6 +80,8 @@
                                 {% endif %}
                             </td>
                             <td>{{ ledger_item.ledger_item_date.strftime("%-m/%-d/%y") }}</td>
+                            <td>{{ ledger_item.description }}</td>
+
     {#
 
                             {# AMOUNT #}
@@ -90,9 +95,9 @@
                                 {{ "%.2f"|format(ledger_item.balance) }}
                             </td>
 
-                            <td>{{ ledger_item.description }}</td>
+                        {% if current_user.clearance >= ClearanceEnum.ADMIN %}
                             <td>{{ ledger_item.created_by_user }}</td>
-
+                        {% endif %}
                         </tr>
                     {% endfor %}
                     </tbody>

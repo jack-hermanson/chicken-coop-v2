@@ -46,7 +46,7 @@ def log_user_in(form: LoginForm) -> bool:
         current_user.last_login = datetime.now(tz=UTC)
         db.session.commit()
         return True
-    time.sleep(2)  # prevent spamming
+    time.sleep(0.5)  # prevent spamming
     logger.warn(f"Incorrect password for {form.username.data}")
     flash("Incorrect username or password.", "danger")
     return False
