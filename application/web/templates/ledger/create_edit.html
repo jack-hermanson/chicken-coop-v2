@@ -30,9 +30,9 @@
             <form action="{{ url_for(request.endpoint, **request.view_args) }}" method="POST">
                 {{ form.hidden_tag() }}
                 <div class="row col-12 col-lg-6">
-                    {{ form_group(form, name="ledger_item_type", required=True) }}
                     {{ form_group(form, name="ledger_item_date", required=True) }}
                     {{ form_group(form, name="description", required=True, render_kw={"autofocus": "true"}) }}
+                    {{ form_group(form, name="ledger_item_type", required=True) }}
                     {{ form_group(form, name="amount", required=True) }}
                 </div>
                 <div class="bottom-buttons">
