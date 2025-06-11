@@ -37,6 +37,8 @@
                             </a>
                         </th>
                         <th scope="col">Description</th>
+{#                        <th scope="col">Income</th>#}
+{#                        <th scope="col">Expense</th>#}
                         <th scope="col" class="text-nowrap">
                             <a href="{{ url_for("ledger.index", order_by="amount", desc=(not sort_and_filter_params.desc)) }}">
                                 Amount ($)
@@ -81,13 +83,14 @@
                             </td>
                             <td>{{ ledger_item.ledger_item_date.strftime("%-m/%-d/%y") }}</td>
                             <td>{{ ledger_item.description }}</td>
-
+{#                            <td>{{ ledger_item.income }}</td>#}
+{#                            <td>{{ ledger_item.expense }}</td>#}
     {#
 
                             {# AMOUNT #}
                             <td class="font-monospace">
                                 <span class="badge fs-6 bg-{% if ledger_item.ledger_item_type == LedgerItemTypeEnum.DEBIT %}danger{% else %}success{% endif %}">
-                                    {{ "%.2f"|format(ledger_item.amount) }}
+                                    {% if ledger_item.ledger_item_type == LedgerItemTypeEnum.CREDIT %}+{% endif %}{{ "%.2f"|format(ledger_item.amount) }}
                                 </span>
                             </td>
                             {# BALANCE #}

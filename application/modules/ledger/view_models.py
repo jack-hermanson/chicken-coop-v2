@@ -14,3 +14,5 @@ class LedgerItemViewModel:
     description: str
     balance: Decimal
     created_by_user: str
+    income: Decimal | None
+    expense: Decimal | None

@@ -80,6 +80,16 @@ def get_ledger_items(sort_and_filter_params: SortAndFilterParams) -> list[Ledger
                 current_ledger_item.description,
                 created_by_user=current_ledger_item.account.name,
                 balance=Decimal(balance),
+                income=(
+                    current_ledger_item.amount
+                    if current_ledger_item.ledger_item_type == LedgerItemTypeEnum.CREDIT
+                    else None
+                ),
+                expense=(
+                    current_ledger_item.amount
+                    if current_ledger_item.ledger_item_type == LedgerItemTypeEnum.DEBIT
+                    else None
+                ),
             ),
         )
 
