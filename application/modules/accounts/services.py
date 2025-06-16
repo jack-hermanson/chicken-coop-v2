@@ -3,7 +3,7 @@ from datetime import UTC, datetime, timedelta
 
 from flask import flash
 from flask_login import current_user, login_user
-from sqlalchemy import func
+from sqlalchemy import func, or_
 
 from application import bcrypt, db, logger
 from application.utils.date_time import utc_to_local
@@ -35,20 +35,28 @@ def get_edit_form() -> EditAccountForm:
 
 
 def log_user_in(form: LoginForm) -> bool:
-    account: Account = Account.query.filter(func.lower(Account.username) == func.lower(form.username.data)).first()
+    account: Account = Account.query.filter(
+        or_(
+            func.lower(Account.username) == func.lower(form.username.data),
+            func.lower(Account.email) == func.lower(form.username.data),
+        ),
+    ).first()
     if account and bcrypt.check_password_hash(account.password, form.password.data):
         login_user(account, remember=True, duration=timedelta(days=99))
         last_login: datetime = account.last_login
         formatted_last_login = (
-            utc_to_local(last_login).strftime("%a %d %b %Y, %I:%M%p") if account.last_login is not None else "never"
+            utc_to_local(last_login).strftime("%A, %D at %l:%M %p") if account.last_login is not None else "never"
         )
         flash(f"Welcome back, {account.name}. Your last login was {formatted_last_login}.", "info")
         current_user.last_login = datetime.now(tz=UTC)
         db.session.commit()
         return True
     time.sleep(0.5)  # prevent spamming
-    logger.warn(f"Incorrect password for {form.username.data}")
-    flash("Incorrect username or password.", "danger")
+    if account:
+        logger.warning(f"Incorrect password for {form.username.data}")
+    else:
+        logger.warning(f"Incorrect username or password {form.username.data}")
+    flash("Incorrect username/email or password.", "danger")
     return False
 
 

@@ -12,7 +12,8 @@ from application.utils.form_filters import lowercase
 username_length = Length(min=2, max=24)
 name_length = Length(min=2, max=32)
 password_length = Length(min=4, max=4)
-email_length = Length(min=5, max=42)
+EMAIL_MAX = 42
+email_length = Length(min=5, max=EMAIL_MAX)
 
 
 class CreateOrEditAccountFormBase(FlaskForm):
@@ -54,9 +55,9 @@ class CreateOrEditAccountFormBase(FlaskForm):
 
 class LoginForm(FlaskForm):
     username = StringField(
-        "Username",
-        validators=[DataRequired(), username_length],
-        description="Your unique username.",
+        "Username or Email",
+        validators=[DataRequired(), Length(max=EMAIL_MAX)],
+        description="Your unique username or email.",
         render_kw={
             "autofocus": "true",
             "spellcheck": "false",
