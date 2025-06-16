@@ -18,3 +18,8 @@ def index() -> ResponseReturnValue:
 @main.route("/info")
 def info() -> ResponseReturnValue:
     return redirect(url_for("about.index"), code=301)
+
+
+@main.route("/error-500")
+def error_500() -> ResponseReturnValue:
+    raise ValueError("Error on purpose")
