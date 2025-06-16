@@ -96,6 +96,18 @@ def get_ledger_items(sort_and_filter_params: SortAndFilterParams) -> list[Ledger
     return result
 
 
+def get_total_income_and_expense(ledger_items: list[LedgerItemViewModel]) -> (Decimal, Decimal):
+    """Calculate the total income and expense for a given set of ledger items."""
+    income: Decimal = Decimal(0)
+    expense: Decimal = Decimal(0)
+    for ledger_item in ledger_items:
+        if ledger_item.ledger_item_type == LedgerItemTypeEnum.CREDIT:
+            income += Decimal(ledger_item.amount)
+        elif ledger_item.ledger_item_type == LedgerItemTypeEnum.DEBIT:
+            expense += Decimal(abs(ledger_item.amount))
+    return income, expense
+
+
 def ledger_items_to_csv(ledger_items: list[LedgerItemViewModel]) -> str:
     output = io.StringIO()
     writer = csv.writer(output, quoting=csv.QUOTE_ALL)
