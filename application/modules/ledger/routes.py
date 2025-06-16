@@ -11,6 +11,7 @@ from application.modules.ledger.services import (
     delete_ledger_item,
     edit_ledger_item,
     get_ledger_items,
+    get_total_income_and_expense,
     ledger_items_to_csv,
     prefill_edit_ledger_item_form_values,
 )
@@ -36,6 +37,24 @@ def index() -> ResponseReturnValue:
         "ledger/index.html",
         ledger_items=ledger_items,
         sort_and_filter_params=sort_and_filter_params,
+    )
+
+
+@ledger.route("/cash-flow")
+@requires_clearance(ClearanceEnum.NORMAL)
+def cash_flow() -> ResponseReturnValue:
+    sort_and_filter_params = SortAndFilterParams()
+    sort_and_filter_params.order_by = "date"
+    sort_and_filter_params.desc = False
+    ledger_items: list[LedgerItemViewModel] = get_ledger_items(sort_and_filter_params)
+    total_income, total_expense = get_total_income_and_expense(ledger_items)
+
+    return render_template(
+        "ledger/cash_flow.html",
+        ledger_items=ledger_items,
+        total_income=total_income,
+        total_expense=total_expense,
+        balance=total_income - total_expense,
     )
 
 

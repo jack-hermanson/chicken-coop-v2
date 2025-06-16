@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% from "_macros/action_dropdown.html" import action_dropdown, action_dropdown_item, action_dropdown_separator %}
+{% from "ledger/_macros/ledger-tabs.html" import ledger_tabs %}
+
+{% set title = "Cash Flow" %}
+{% set subtitle = "Another way to look at incomes and expenses." %}
+{% set active_route = "ledger" %}
+
+{% block tabs %}
+    {{ ledger_tabs("cash_flow") }}
+{% endblock tabs %}
+
+{% block body %}
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive-sm">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">
+                            Date
+                        </th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Income</th>
+                        <th scope="col">Expense</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for ledger_item in ledger_items %}
+                        <tr>
+                            <td>
+                                {% if current_user.clearance >= ClearanceEnum.ADMIN %}
+                                    <a href="{{ url_for("ledger.edit", ledger_item_id=ledger_item.ledger_item_id) }}">
+                                        {{ ledger_item.ledger_item_id }}
+                                    </a>
+                                {% else %}
+                                    {{ ledger_item.ledger_item_id }}
+                                {% endif %}
+                            </td>
+                            <td>{{ ledger_item.ledger_item_date.strftime("%-m/%-d/%y") }}</td>
+                            <td>{{ ledger_item.description }}</td>
+                            <td class="font-monospace">
+                                {% if ledger_item.income %}
+                                    {{ "${:,.2f}".format(ledger_item.income) }}
+                                {% endif %}
+                            </td>
+                            <td class="font-monospace">
+                                {% if ledger_item.expense %}
+                                    ({{ "{:,.2f}".format(ledger_item.expense|abs) }})
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr style="border-top: 5px solid white;">
+                            <th scope="row" colspan="3">Total</th>
+                            <td class="font-monospace fw-bold">
+                                {{ "${:,.2f}".format(total_income) }}
+                            </td>
+                            <td class="font-monospace fw-bold">
+                                ({{ "{:,.2f}".format(total_expense) }})
+                            </td>
+                        </tr>
+                        <tr style="border-top: 5px double white;">
+                            <th scope="row" colspan="3">Remaining</th>
+
+                            <td colspan="2" class="font-monospace fw-bold">
+                                {% if balance >= 0 %}
+                                    {{ "${:,.2f}".format(balance) }}
+                                {% else %}
+                                    ({{ "${:,.2f}".format(total_income) }})
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock body %}

@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% from "_macros/action_dropdown.html" import action_dropdown, action_dropdown_item, action_dropdown_separator %}
+{% from "ledger/_macros/ledger-tabs.html" import ledger_tabs %}
 
 {% set title = "Finances" %}
 {% set subtitle = "This is where we keep track of incomes and expenses." %}
@@ -15,6 +16,10 @@
         {{ action_dropdown_item("Export", url_for("ledger.index", csv=True)) }}
     {% endcall %}
 {% endblock %}
+
+{% block tabs %}
+    {{ ledger_tabs("ledger") }}
+{% endblock tabs %}
 
 {% block body %}
     <div class="row">
@@ -90,12 +95,12 @@
                             {# AMOUNT #}
                             <td class="font-monospace">
                                 <span class="badge fs-6 bg-{% if ledger_item.ledger_item_type == LedgerItemTypeEnum.DEBIT %}danger{% else %}success{% endif %}">
-                                    {% if ledger_item.ledger_item_type == LedgerItemTypeEnum.CREDIT %}+{% endif %}{{ "%.2f"|format(ledger_item.amount) }}
+                                    {% if ledger_item.ledger_item_type == LedgerItemTypeEnum.CREDIT %}+{% endif %}{{ "{:,.2f}".format(ledger_item.amount) }}
                                 </span>
                             </td>
                             {# BALANCE #}
                             <td class="font-monospace">
-                                {{ "%.2f"|format(ledger_item.balance) }}
+                                {{ "{:,.2f}".format(ledger_item.balance) }}
                             </td>
 
                         {% if current_user.clearance >= ClearanceEnum.ADMIN %}
