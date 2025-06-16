@@ -2,8 +2,8 @@
 
 update-macros:
 	git submodule update --remote --merge
-	git add shared_macros
-	git commit -m "Update shared_macros to latest commit"
+	git add application/web/templates/_macros
+	git commit -m "Update macros to latest commit"
 
 push-macros:
-	cd shared_macros && git push origin main
+	cd application/web/templates/_macros && git push origin main
