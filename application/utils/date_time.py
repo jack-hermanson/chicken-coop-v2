@@ -14,3 +14,7 @@ def utc_to_local(utc_dt: datetime) -> datetime:
 
     local_tz = pytz.timezone("America/Denver")
     return utc_dt.astimezone(tz=local_tz)
+
+
+def utcnow() -> datetime:
+    return datetime.now(tz=pytz.utc)

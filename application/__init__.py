@@ -39,7 +39,8 @@ def create_app(config_class: type[Config] = Config) -> Flask:
 
     # models
     import application.modules.accounts.models
-    import application.modules.ledger.models  # noqa: F401
+    import application.modules.ledger.models
+    import application.modules.shifts.models  # noqa: F401
 
     # database
     db.app = app
