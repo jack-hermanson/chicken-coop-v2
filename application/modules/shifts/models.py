@@ -1,17 +1,23 @@
-from datetime import date
+from datetime import date, datetime
 from enum import IntEnum
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Date, ForeignKey, Integer, String
+from sqlalchemy import Date, DateTime, ForeignKey, Integer, String, text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from application import db
+from application.utils.date_time import utcnow
 
 if TYPE_CHECKING:
     from application.modules.accounts.models import Account
 
 
 class Shift(db.Model):
+    """
+    This is the individual instance of a shift, like the 6/19 evening shift.
+    Should be generated a year in advance.
+    """
+
     __tablename__ = "shift"
 
     shift_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
@@ -19,6 +25,7 @@ class Shift(db.Model):
     comments: Mapped[str] = mapped_column(String(255), nullable=False, server_default="", default="")
     eggs_collected: Mapped[int] = mapped_column(Integer, nullable=True)
     eggs_left_behind: Mapped[int] = mapped_column(Integer, nullable=True)
+    # completed_datetime_utc: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=True)
 
     # Relationship back to Account for list of assigned shifts
     assigned_to_account_id: Mapped[int] = mapped_column(ForeignKey("account.account_id"), nullable=True)
@@ -33,15 +40,34 @@ class Shift(db.Model):
 
 
 class CoverageRequest(db.Model):
+    """
+    This has a one-to-one relationship with Shift.
+    If a shift has a coverage request, this is it.
+    If not, this does not exist.
+    """
+
     __tablename__ = "coverage_request"
 
     coverage_request_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+
+    # When was this coverage request created
+    created_datetime_utc: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=utcnow,
+        server_default=text("CURRENT_TIMESTAMP"),
+    )
+
+    # Any notes the requestor wants to add
+    comments: Mapped[str] = mapped_column(String(255), nullable=False, server_default="", default="")
 
     # Relationship back to Shift
     shift_id: Mapped[int] = mapped_column(ForeignKey("shift.shift_id"), nullable=False, unique=True)
     shift: Mapped["Shift"] = relationship(back_populates="coverage_request", lazy="select")
 
     # Covered by
+    covered_by_account_id: Mapped[int] = mapped_column(ForeignKey("account.account_id"), nullable=True)
+    covered_by_account: Mapped["Account"] = relationship(back_populates="accepted_coverage_requests", lazy="select")
 
 
 class TimeOfDayEnum(IntEnum):
@@ -62,6 +88,12 @@ class DayOfWeekEnum(IntEnum):
 
 
 class ShiftAssignment(db.Model):
+    """
+    This is a generic "assignment" that can have an account or not. Ex: "Monday evening". If there's an account,
+    then Shifts will be generated for that person.
+    When the assignment changes, all future Shifts should be updated to reflect that.
+    """
+
     __tablename__ = "shift_assignment"
 
     shift_assignment_id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
@@ -78,10 +110,3 @@ class ShiftAssignment(db.Model):
         lazy="dynamic",
         cascade="all, delete-orphan",
     )
-
-    # completed_datetime_utc: Mapped[datetime] = mapped_column(
-    #     DateTime(timezone=True),
-    #     nullable=False,
-    #     default=utcnow,
-    #     server_default=text("CURRENT_TIMESTAMP"),
-    # )

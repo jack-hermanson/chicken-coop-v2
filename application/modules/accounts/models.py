@@ -10,7 +10,7 @@ from application.modules.accounts.clearance_enum import ClearanceEnum
 from application.modules.ledger.models import LedgerItem
 
 if TYPE_CHECKING:
-    from application.modules.shifts.models import Shift, ShiftAssignment
+    from application.modules.shifts.models import CoverageRequest, Shift, ShiftAssignment
 
 
 class Account(db.Model, UserMixin):
@@ -39,5 +39,11 @@ class Account(db.Model, UserMixin):
     # One-to-many relationship to Assignment - these are like "every Monday evening"
     assignments: Mapped[list["ShiftAssignment"]] = relationship(
         back_populates="account",
+        cascade="all, delete-orphan",
+    )
+
+    # Coverage requests accepted by this account
+    accepted_coverage_requests: Mapped[list["CoverageRequest"]] = relationship(
+        back_populates="covered_by_account",
         cascade="all, delete-orphan",
     )
