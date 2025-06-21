@@ -32,11 +32,18 @@ class Shift(db.Model):
 
     # Relationship back to Account for list of assigned shifts
     assigned_to_account_id: Mapped[int] = mapped_column(ForeignKey("account.account_id"), nullable=True)
-    assigned_to_account: Mapped[Account] = relationship(back_populates="assigned_shifts", lazy="select")
+    assigned_to_account: Mapped[Account] = relationship(
+        back_populates="assigned_shifts",
+        lazy="select",
+        foreign_keys="[Shift.assigned_to_account_id]",
+    )
 
     # Who completed this shift
     completed_by_account_id: Mapped[int] = mapped_column(ForeignKey("account.account_id"), nullable=True)
-    completed_by_account: Mapped[Account] = relationship(lazy="select")
+    completed_by_account: Mapped[Account] = relationship(
+        lazy="select",
+        foreign_keys="[Shift.completed_by_account_id]",
+    )
 
     # If this shift has a coverage request
     coverage_request: Mapped[CoverageRequest] = relationship(back_populates="shift", uselist=False)

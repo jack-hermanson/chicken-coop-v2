@@ -34,6 +34,7 @@ class Account(db.Model, UserMixin):
     assigned_shifts: Mapped[list["Shift"]] = relationship(
         back_populates="assigned_to_account",
         cascade="all, delete-orphan",
+        foreign_keys="[Shift.assigned_to_account_id]",
     )
 
     # One-to-many relationship to Assignment - these are like "every Monday evening"
