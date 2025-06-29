@@ -2,18 +2,14 @@ from datetime import date, datetime
 from decimal import Decimal
 from typing import TYPE_CHECKING
 
-from pytz import utc
 from sqlalchemy import Date, DateTime, ForeignKey, Integer, Numeric, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from application import LedgerItemTypeEnum, db
+from application.utils.date_time import utcnow
 
 if TYPE_CHECKING:
     from application.modules.accounts.models import Account
-
-
-def utcnow() -> datetime:
-    return datetime.now(tz=utc)
 
 
 class LedgerItem(db.Model):
