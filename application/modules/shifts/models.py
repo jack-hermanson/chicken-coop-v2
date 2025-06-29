@@ -139,3 +139,9 @@ class ShiftAssignment(db.Model):
         lazy="dynamic",
         cascade="all, delete-orphan",
     )
+
+    def __repr__(self) -> str:
+        return (
+            f"<ShiftAssignment: {self.shift_assignment_id}, {DayOfWeekEnum(self.day_of_week).name}, "
+            f"{TimeOfDayEnum(self.time_of_day).name}>"
+        )

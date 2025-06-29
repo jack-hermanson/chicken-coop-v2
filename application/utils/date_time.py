@@ -2,6 +2,8 @@ from datetime import datetime
 
 import pytz
 
+LOCAL_TIMEZONE = pytz.timezone("America/Denver")
+
 
 def utc_to_local(utc_dt: datetime) -> datetime:
     """
@@ -12,7 +14,7 @@ def utc_to_local(utc_dt: datetime) -> datetime:
     if utc_dt.tzinfo is None:
         utc_dt = utc_dt.replace(tzinfo=pytz.utc)
 
-    local_tz = pytz.timezone("America/Denver")
+    local_tz = LOCAL_TIMEZONE
     return utc_dt.astimezone(tz=local_tz)
 
 
