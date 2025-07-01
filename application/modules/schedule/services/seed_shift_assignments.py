@@ -1,7 +1,7 @@
 from sqlalchemy import and_
 
 from application import db, logger
-from application.modules.shifts.models import DayOfWeekEnum, ShiftAssignment, TimeOfDayEnum
+from application.modules.schedule.models import DayOfWeekEnum, ShiftAssignment, TimeOfDayEnum
 
 
 def seed_shift_assignments() -> None:

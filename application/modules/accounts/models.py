@@ -10,7 +10,7 @@ from application.modules.accounts.clearance_enum import ClearanceEnum
 from application.modules.ledger.models import LedgerItem
 
 if TYPE_CHECKING:
-    from application.modules.shifts.models import CoverageRequest, Shift, ShiftAssignment
+    from application.modules.schedule.models import CoverageRequest, Shift, ShiftAssignment
 
 
 class Account(db.Model, UserMixin):

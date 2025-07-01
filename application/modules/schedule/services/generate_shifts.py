@@ -2,7 +2,7 @@ from datetime import date, datetime, timedelta
 from time import perf_counter
 
 from application import db, logger
-from application.modules.shifts.models import Shift, ShiftAssignment, TimeOfDayEnum
+from application.modules.schedule.models import Shift, ShiftAssignment, TimeOfDayEnum
 from application.utils.date_time import LOCAL_TIMEZONE
 
 

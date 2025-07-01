@@ -40,7 +40,7 @@ def create_app(config_class: type[Config] = Config) -> Flask:
     # models
     import application.modules.accounts.models
     import application.modules.ledger.models
-    import application.modules.shifts.models  # noqa: F401
+    import application.modules.schedule.models  # noqa: F401
 
     # database
     db.app = app
@@ -56,11 +56,12 @@ def create_app(config_class: type[Config] = Config) -> Flask:
     from application.modules.help.routes import help  # noqa: A004
     from application.modules.ledger.routes import ledger
     from application.modules.main.routes import main
+    from application.modules.schedule.routes import schedule
     from application.modules.support.routes import support
 
     from .modules.errors.handlers import errors
 
-    for blueprint in [accounts, main, about, ledger, help, support, errors]:
+    for blueprint in [accounts, main, about, ledger, help, support, errors, schedule]:
         app.register_blueprint(blueprint)
 
     # login manager
@@ -79,7 +80,9 @@ def create_app(config_class: type[Config] = Config) -> Flask:
 
     @app.before_request
     def before_request() -> None:
-        if not request.path.startswith("/static"):
+        excluded_paths = ["/static", "/manifest.json", "/sw.js"]
+        request_path = request.path.lower()
+        if not any(request_path.startswith(path) for path in excluded_paths):
             logger.debug(
                 f"[{current_user.username if current_user.is_authenticated else 'anon'} - {get_ip(request)}] "
                 f"{request.method}: {request.path} ",
