@@ -1,0 +1,12 @@
+{% from "_macros/tabs.html" import tabs, tab %}
+
+{% macro schedule_tabs(active_tab="my_schedule") %}
+
+    {% call tabs() %}
+        {{ tab(name="Mine", url=url_for("schedule.my_schedule"), is_active=(active_tab == "my_schedule")) }}
+        {{ tab(name="Coverage", url="#", is_active=(active_tab == "coverage"), badge=4) }}
+        {{ tab(name="Daily", url=url_for("schedule.daily"), is_active=(active_tab == "daily")) }}
+        {{ tab(name="Weekly", url=url_for("schedule.weekly"), is_active=(active_tab == "weekly")) }}
+    {% endcall %}
+
+{% endmacro %}

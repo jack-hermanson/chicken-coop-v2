@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% from "schedule/_macros/schedule-tabs.html" import schedule_tabs with context %}
+{% from "schedule/_macros/my_future_shift.html" import my_future_shift with context %}
+{% from "_macros/pagination.html" import pagination %}
+{% from "_macros/breadcrumbs.html" import breadcrumbs %}
+
+{% if past %}
+    {% set title = "Past Shifts" %}
+{% else %}
+    {% set title = "Future Shifts" %}
+{% endif %}
+{% set active_route = "schedule" %}
+{% set hide_title_row = False %}
+
+{% block tabs %}
+    {{ schedule_tabs("my_schedule") }}
+{% endblock tabs %}
+
+{% block breadcrumbs %}
+    {{ breadcrumbs(crumbs=[
+        (url_for("schedule.my_schedule"), "My Schedule"),
+        (url_for("schedule.all_my_shifts", past=past), "More")
+    ]) }}
+{% endblock breadcrumbs %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-12 col-lg-6">
+            <ul class="list-group">
+                {% for item in paginated_shifts.items %}
+                    {% if not past %}
+                        {{ my_future_shift(item) }}
+                    {% else %}
+                        <li class="list-group-item">{{ item }}</li>
+                    {% endif %}
+                {% endfor %}
+
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-lg-6">
+            {{ pagination(pagination_model=paginated_shifts, endpoint="schedule.all_my_shifts", special_kwargs={"past": past}) }}
+        </div>
+    </div>
+{% endblock body %}

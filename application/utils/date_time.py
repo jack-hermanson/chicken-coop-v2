@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 
 import pytz
 
@@ -20,3 +20,11 @@ def utc_to_local(utc_dt: datetime) -> datetime:
 
 def utcnow() -> datetime:
     return datetime.now(tz=pytz.utc)
+
+
+def to_short_date_string(date_to_display: date) -> str:
+    return date_to_display.strftime("%a, %-m/%-d")
+
+
+def to_short_time_string(date_time_to_display: datetime) -> str:
+    return date_time_to_display.strftime("%l:%M %p")

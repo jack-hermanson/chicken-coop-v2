@@ -88,7 +88,7 @@ logging.getLogger("sqlalchemy.engine").addHandler(fh)
 logging.getLogger("sqlalchemy.engine").propagate = False
 
 # Werkzeug
-werkzeug_log_level = logging.WARNING  # if environment == "production" else logging.INFO
+werkzeug_log_level = logging.DEBUG  # if environment == "production" else logging.INFO
 logging.getLogger("werkzeug").setLevel(werkzeug_log_level)
 logging.getLogger("werkzeug").addFilter(StaticURLFilter())
 logging.getLogger("werkzeug").addHandler(fh)

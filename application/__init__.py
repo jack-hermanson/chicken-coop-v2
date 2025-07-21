@@ -1,16 +1,16 @@
 import logging
 import os
 import subprocess
-from typing import Type
+from datetime import date, datetime
 
 from flask import Flask, request
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, current_user
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import DeclarativeBase
 
 from application.modules.accounts.clearance_enum import ClearanceEnum
+from application.utils import date_time
 from application.utils.crud_enum import CrudEnum
 from application.utils.get_ip import get_ip
 from application.utils.ledger_item_type_enum import LedgerItemTypeEnum
@@ -18,7 +18,7 @@ from Config import Config
 from logger import logger
 
 bcrypt = Bcrypt()
-db = SQLAlchemy()
+db = SQLAlchemy(engine_options={"echo": bool(int(os.environ.get("SQLALCHEMY_ECHO")))})
 migrate = Migrate(compare_type=True)
 logging.basicConfig(level=logging.DEBUG)
 
@@ -68,6 +68,8 @@ def create_app(config_class: type[Config] = Config) -> Flask:
     login_manager.init_app(app)
 
     # template filters / context processors / pre-request stuff
+    from application.modules.schedule.models import DayOfWeekEnum, TimeOfDayEnum
+
     @app.context_processor
     def inject_environment() -> dict:
         return {
@@ -76,7 +78,21 @@ def create_app(config_class: type[Config] = Config) -> Flask:
             "ClearanceEnum": ClearanceEnum,
             "CrudEnum": CrudEnum,
             "LedgerItemTypeEnum": LedgerItemTypeEnum,
+            "DayOfWeekEnum": DayOfWeekEnum,
+            "TimeOfDayEnum": TimeOfDayEnum,
         }
+
+    @app.template_filter()
+    def to_short_date_string(d: date) -> str:
+        return date_time.to_short_date_string(d)
+
+    @app.template_filter()
+    def utc_to_local(utc_datetime: datetime) -> date:
+        return date_time.utc_to_local(utc_datetime)
+
+    @app.template_filter()
+    def to_short_time_string(d: datetime) -> str:
+        return date_time.to_short_time_string(d)
 
     @app.before_request
     def before_request() -> None:

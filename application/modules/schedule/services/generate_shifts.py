@@ -26,6 +26,7 @@ def generate_shifts(days_ahead: int = 365) -> None:
 
     # Loop through dates that are in the range we want.
     created_shifts_count: int = 0
+    logger.debug(f"dates_to_check {dates_to_check}")
     for date_to_check in dates_to_check:
         # Morning and evening.
         for time_of_day in list(TimeOfDayEnum):
@@ -64,5 +65,8 @@ def _create_shift(shift_assignment: ShiftAssignment, shift_date: date) -> Shift:
     shift: Shift = Shift()
     shift.shift_assignment = shift_assignment
     shift.date = shift_date
-    shift.assigned_to_account = shift_assignment.account
+
+    # no auto flush because the back reference to this nes shift does not work yet
+    with db.session.no_autoflush:
+        shift.assigned_to_account = shift_assignment.account
     return shift

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% from "schedule/_macros/schedule-tabs.html" import schedule_tabs with context %}
+{% from "schedule/_macros/my_future_shift.html" import my_future_shift with context %}
+
+{% set title = "Schedule" %}
+{% set active_route = "schedule" %}
+{% set hide_title_row = True %}
+
+{% block tabs %}
+    {{ schedule_tabs("my_schedule") }}
+{% endblock tabs %}
+
+
+
+{% block body %}
+    <div class="row mb-3">
+        <div class="col-12 col-lg-6">
+            <h2>
+                {# todo - if shift is due today, show hour glass #}
+                <i class="fa fa-clock fa-xs me-1"></i>
+                Next Shift{% if my_schedule.next_shifts|length != 1 %}s{% endif %}
+            </h2>
+            <ul class="list-group mb-1">
+                {% for shift in my_schedule.next_shifts %}
+                    {{ my_future_shift(shift) }}
+                {% endfor %}
+            </ul>
+            <a href="{{ url_for("schedule.all_my_shifts", past=False) }}">More &rarr;</a>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-12 col-lg-6">
+            <h2>
+                <i class="fa fa-backward fa-xs me-1"></i>
+                Past Shift{% if my_schedule.past_assignments|length != 1 %}s{% endif %}
+            </h2>
+            <ul class="list-group mb-1">
+                {% for shift in my_schedule.past_shifts %}
+                    <li class="list-group-item">
+                        <div>
+                            <span class="fw-bold">
+                                {{ shift.date|to_short_date_string }} &bull;
+                                {{ TimeOfDayEnum(shift.time_of_day).name|capitalize }}
+                            </span>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+            <a href="{{ url_for("schedule.all_my_shifts", past=True) }}">More &rarr;</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-lg-6">
+            <h2>
+                <i class="fa fa-repeat fa-xs me-1"></i>
+                Weekly Assignment{% if my_schedule.weekly_assignments|length != 1 %}s{% endif %}
+            </h2>
+            {% if my_schedule.weekly_assignments.length != 0 %}
+                <p>
+                    You are assigned to
+                    {% for weekly_assignment in my_schedule.weekly_assignments %}
+                        <span class="fst-italic">
+                            {{ DayOfWeekEnum(weekly_assignment.day_of_week).name|capitalize }}
+                            {{ TimeOfDayEnum(weekly_assignment.time_of_day).name|capitalize }}s</span
+                        >{% if not loop.last %} and {% else %}.{% endif %}
+                    {% endfor %}
+                </p>
+
+            {% else %}
+                <p class="small text-muted">No weekly shift assignments.</p>
+            {% endif %}
+
+        </div>
+    </div>
+{% endblock body %}

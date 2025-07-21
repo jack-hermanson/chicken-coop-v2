@@ -1,0 +1,26 @@
+{% macro completed_shift_information(shift) %}
+    {% if shift.completed_datetime_utc %}
+        <div class="fst-italic text-muted">
+            {% if shift.completed_by_account == current_user %}
+                You
+            {% else %}
+                {{ shift.completed_by_account.name }}
+            {% endif %}
+            completed this shift at
+            {{ shift.completed_datetime_utc|utc_to_local|to_short_time_string }}.
+        </div>
+        <div class="mt-1">
+            <div>
+                <b class="me-1">Eggs Collected:</b>
+            </div>
+            <div>
+                <b class="me-1">Eggs Left Behind:</b> {{ shift.eggs_left_behind }}
+            </div>
+            {% if shift.comments %}
+                <div>
+                    <b class="me-1">Comments:</b> {{ shift.comments }}
+                </div>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endmacro %}

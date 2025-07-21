@@ -41,7 +41,7 @@ class Shift(db.Model):
     # Who completed this shift
     completed_by_account_id: Mapped[int] = mapped_column(ForeignKey("account.account_id"), nullable=True)
     completed_by_account: Mapped[Account] = relationship(
-        lazy="select",
+        lazy="immediate",
         foreign_keys="[Shift.completed_by_account_id]",
     )
 
@@ -50,7 +50,7 @@ class Shift(db.Model):
 
     # Relationship back to ShiftAssignment for list of specific shifts
     shift_assignment_id: Mapped[int] = mapped_column(ForeignKey("shift_assignment.shift_assignment_id"), nullable=True)
-    shift_assignment: Mapped[ShiftAssignment] = relationship(back_populates="shifts", lazy="select")
+    shift_assignment: Mapped[ShiftAssignment] = relationship(back_populates="shifts", lazy="immediate")
 
     # Computed column to tell you if this shift was completed
     @hybrid_property
@@ -64,6 +64,9 @@ class Shift(db.Model):
             (cls.completed_datetime_utc.is_not(None), True),
             else_=False,
         )
+
+    def __repr__(self) -> str:
+        return f"Shift<{self.shift_id}, {self.date.isoformat()}>"
 
 
 class CoverageRequest(db.Model):

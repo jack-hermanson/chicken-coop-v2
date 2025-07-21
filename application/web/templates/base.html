@@ -87,7 +87,7 @@
                     {% if current_user.is_authenticated and current_user.clearance >= ClearanceEnum.NORMAL %}
                         <hr class="my-2">
                         {{ nav_link(href=url_for('main.index'), active=(active_route == "main"), icon="fa-home", text="Dashboard") }}
-                        {{ nav_link(href=url_for('schedule.index'), active=(active_route == "schedule"), icon="fa-calendar-days", text="Schedule") }}
+                        {{ nav_link(href=url_for('schedule.my_schedule'), active=(active_route == "schedule"), icon="fa-calendar-days", text="Schedule") }}
                         {{ nav_link(href="#", active=(active_route == "notebook"), icon="fa-book-open", text="Notebook") }}
                         {{ nav_link(href=url_for("ledger.index"), active=(active_route == "ledger"), icon="fa-piggy-bank", text="Finances") }}
                         {{ nav_link(href="#", active=(active_route == "maintenance"), icon="fa-screwdriver-wrench", text="Maintenance") }}
