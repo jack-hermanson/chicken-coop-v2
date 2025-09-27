@@ -38,7 +38,7 @@ def log_user_in(form: LoginForm) -> bool:
     account: Account = Account.query.filter(
         or_(
             func.lower(Account.username) == func.lower(form.username.data),
-            func.lower(Account.email) == func.lower(form.username.data),
+            func.lower(Account.email) == func.lower(form.username.data),  # "username" field also accepts email
         ),
     ).first()
     if account and bcrypt.check_password_hash(account.password, form.password.data):

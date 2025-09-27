@@ -12,9 +12,19 @@
         <div class="mt-1">
             <div>
                 <b class="me-1">Eggs Collected:</b>
+                {% if shift.eggs_collected == None %}
+                    -
+                {% else %}
+                    {{ shift.eggs_collected }}
+                {% endif %}
             </div>
             <div>
-                <b class="me-1">Eggs Left Behind:</b> {{ shift.eggs_left_behind }}
+                <b class="me-1">Eggs Left Behind:</b>
+                {% if shift.eggs_left_behind == None %}
+                    -
+                {% else %}
+                    {{ shift.eggs_left_behind }}
+                {% endif %}
             </div>
             {% if shift.comments %}
                 <div>
